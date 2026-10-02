@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Haftalik jadval{% endblock %}
+{% block page_title %}Haftalik jadval{% endblock %}
+{% block page_subtitle %}<p>Guruhlar bo‘yicha dars jadvali</p>{% endblock %}
+
+{% block content %}
+<div class="week-grid">
+  {% for day in days %}
+  <div class="day-col" data-weekday="{{ day.weekday }}">
+    <h3>{{ day.label }}</h3>
+    {% if day.items %}
+      {% for item in day.items %}
+      <div class="lesson-chip">
+        <strong>{{ item.start_time|time:"H:i" }}–{{ item.end_time|time:"H:i" }}</strong>
+        <div>{{ item.group.name }}</div>
+        <div>{{ item.group.course.title }}</div>
+        <div>{{ item.room.name }}</div>
+      </div>
+      {% endfor %}
+    {% else %}
+    <p class="empty">Bo‘sh</p>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+  var d = new Date().getDay();
+  var iso = d === 0 ? 7 : d;
+  var el = document.querySelector('.day-col[data-weekday="' + iso + '"]');
+  if (el) el.classList.add('today');
+})();
+</script>
+{% endblock %}

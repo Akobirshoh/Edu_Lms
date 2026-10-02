@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}O‘qituvchi paneli{% endblock %}
+{% block page_title %}O‘qituvchi paneli{% endblock %}
+{% block page_subtitle %}<p>{% if teacher_profile %}{{ teacher_profile }}{% else %}Profil topilmadi{% endif %}</p>{% endblock %}
+
+{% block content %}
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-label">Guruhlar</div>
+    <div class="stat-num">{{ groups|length }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Tekshirilmagan javoblar</div>
+    <div class="stat-num">{{ unchecked_answers }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Kutilayotgan xaridlar</div>
+    <div class="stat-num">{{ pending_purchases }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Bugungi darslar</div>
+    <div class="stat-num">{{ today_schedules|length }}</div>
+  </div>
+</div>
+
+<div class="grid grid-2" style="margin-top: 1.25rem;">
+  <div class="panel">
+    <div class="panel-head">
+      <h2>Mening guruhlarim</h2>
+      <a class="btn btn-sm btn-secondary" href="{% url 'teacher_groups' %}">Barchasi</a>
+    </div>
+    <div class="panel-body">
+      {% if groups %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Guruh</th>
+              <th>Kurs</th>
+              <th>O‘quvchilar</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for g in groups %}
+            <tr>
+              <td><a href="{% url 'group_detail' g.pk %}">{{ g.name }}</a></td>
+              <td>{{ g.course.title }}</td>
+              <td>{{ g.students_count }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="empty">Guruhlar yo‘q.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <h2>Bugungi jadval</h2>
+      <a class="btn btn-sm btn-secondary" href="{% url 'weekly_schedule' %}">Haftalik</a>
+    </div>
+    <div class="panel-body">
+      {% if today_schedules %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Vaqt</th>
+              <th>Guruh</th>
+              <th>Xona</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for s in today_schedules %}
+            <tr>
+              <td>{{ s.start_time|time:"H:i" }}–{{ s.end_time|time:"H:i" }}</td>
+              <td>{{ s.group.name }}</td>
+              <td>{{ s.room.name }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="empty">Bugun dars yo‘q.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="form-actions" style="margin-top: 1rem;">
+  <a class="btn btn-primary" href="{% url 'teacher_queue' %}">Normativlarni tekshirish</a>
+  <a class="btn btn-secondary" href="{% url 'purchases_list' %}">Xaridlar</a>
+  <a class="btn btn-secondary" href="{% url 'teacher_profile' %}">Profil</a>
+</div>
+{% endblock %}

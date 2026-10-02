@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Coin yozish{% endblock %}
+{% block page_title %}Coin yozish{% endblock %}
+{% block page_subtitle %}<p>O‘quvchiga qo‘lda coin berish yoki ayirish</p>{% endblock %}
+
+{% block content %}
+<div class="panel">
+  <div class="panel-head"><h2>Qo‘lda coin</h2></div>
+  <div class="panel-body">
+    <form method="post" class="form-card">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+      <div class="field-error">{{ form.non_field_errors }}</div>
+      {% endif %}
+      {% for field in form %}
+      <div class="form-group">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}<div class="field-error">{{ field.errors }}</div>{% endif %}
+      </div>
+      {% endfor %}
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Yozish</button>
+        <a href="{% url 'shop_list' %}" class="btn btn-secondary">Do‘kon</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}{{ course.title }}{% endblock %}
+{% block page_title %}{{ course.title }}{% endblock %}
+{% block page_subtitle %}<p>{{ course.duration_months }} oy · {% if course.is_active %}<span class="badge badge-success">Faol</span>{% else %}<span class="badge badge-muted">Nofaol</span>{% endif %}</p>{% endblock %}
+
+{% block content %}
+<div class="panel">
+  <div class="panel-head">
+    <h2>Kurs haqida</h2>
+    {% if request.user.role == 'admin' or request.user.role == 'teacher' or request.user.is_superuser %}
+    <div>
+      <a class="btn btn-sm btn-secondary" href="{% url 'course_update' course.pk %}">Tahrirlash</a>
+      <a class="btn btn-sm btn-primary" href="{% url 'module_add' course.pk %}">Modul qo‘shish</a>
+      <a class="btn btn-sm btn-danger" href="{% url 'course_delete' course.pk %}">O‘chirish</a>
+    </div>
+    {% endif %}
+  </div>
+  <div class="panel-body">
+    <p>{{ course.description|linebreaksbr|default:"Tavsif yo‘q." }}</p>
+  </div>
+</div>
+
+<div class="grid grid-2" style="margin-top: 1.25rem;">
+  <div class="panel">
+    <div class="panel-head"><h2>Modullar va darslar</h2></div>
+    <div class="panel-body">
+      {% if course.modules.all %}
+        {% for module in course.modules.all %}
+        <div class="panel" style="margin-bottom: 0.75rem;">
+          <div class="panel-head">
+            <h3>{{ module.order }}. {{ module.title }}</h3>
+            {% if request.user.role == 'admin' or request.user.role == 'teacher' or request.user.is_superuser %}
+            <a class="btn btn-sm btn-secondary" href="{% url 'lesson_add' course.pk module.pk %}">Dars qo‘shish</a>
+            {% endif %}
+          </div>
+          <div class="panel-body">
+            {% if module.lessons.all %}
+            <ul>
+              {% for lesson in module.lessons.all %}
+              <li>
+                {{ lesson.order }}. {{ lesson.title }}
+                {% if request.user.role == 'admin' or request.user.role == 'teacher' or request.user.is_superuser %}
+                — <a href="{% url 'create_normativ' lesson.pk %}">Normativ</a>
+                {% endif %}
+              </li>
+              {% endfor %}
+            </ul>
+            {% else %}
+            <p class="empty">Darslar yo‘q.</p>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+      <p class="empty">Modullar hali qo‘shilmagan.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h2>Guruhlar</h2></div>
+    <div class="panel-body">
+      {% if course.groups.all %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Guruh</th>
+              <th>O‘qituvchi</th>
+              <th>Holat</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for g in course.groups.all %}
+            <tr>
+              <td><a href="{% url 'group_detail' g.pk %}">{{ g.name }}</a></td>
+              <td>{{ g.teacher }}</td>
+              <td>{% if g.is_active %}<span class="badge badge-success">Faol</span>{% else %}<span class="badge badge-muted">Nofaol</span>{% endif %}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="empty">Guruhlar yo‘q.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

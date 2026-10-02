@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}O‘qituvchilar{% endblock %}
+{% block page_title %}O‘qituvchilar{% endblock %}
+{% block page_subtitle %}<p>Barcha o‘qituvchilar ro‘yxati</p>{% endblock %}
+
+{% block content %}
+<div class="panel">
+  <div class="panel-head"><h2>Ro‘yxat</h2></div>
+  <div class="panel-body">
+    {% if teachers %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Ism</th>
+            <th>Login</th>
+            <th>Telefon</th>
+            <th>Mutaxassislik</th>
+            <th>Guruhlar</th>
+            <th>O‘quvchilar</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in teachers %}
+          <tr>
+            <td>{{ t.user.get_full_name|default:t.user.username }}</td>
+            <td>{{ t.user.username }}</td>
+            <td>{{ t.user.phone|default:"—" }}</td>
+            <td>{{ t.specialization|default:"—" }}</td>
+            <td>{{ t.groups_count }}</td>
+            <td>{{ t.students_count }}</td>
+            <td><a class="btn btn-sm btn-secondary" href="{% url 'teacher_detail' t.pk %}">Profil</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="empty">O‘qituvchilar topilmadi.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

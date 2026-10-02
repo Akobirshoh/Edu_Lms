@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}O‘quvchilarni boshqarish{% endblock %}
+{% block page_title %}O‘quvchilarni boshqarish{% endblock %}
+{% block page_subtitle %}<p>{{ group.name }}</p>{% endblock %}
+
+{% block content %}
+<div class="panel">
+  <div class="panel-head">
+    <h2>Faol o‘quvchilar</h2>
+    <a class="btn btn-sm btn-secondary" href="{% url 'group_detail' group.pk %}">Guruhga qaytish</a>
+  </div>
+  <div class="panel-body">
+    {% if active_memberships %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>O‘quvchi</th>
+            <th>Qo‘shilgan</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for m in active_memberships %}
+          <tr>
+            <td>{{ m.student }}</td>
+            <td>{{ m.joined_at|date:"d.m.Y" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="empty">Faol o‘quvchilar yo‘q.</p>
+    {% endif %}
+  </div>
+</div>
+
+<div class="grid grid-2" style="margin-top: 1.25rem;">
+  <div class="panel">
+    <div class="panel-head"><h2>Qo‘shish</h2></div>
+    <div class="panel-body">
+      <form method="post" class="form-card">
+        {% csrf_token %}
+        <div class="form-group">
+          <label>{{ add_form.students.label }}</label>
+          {{ add_form.students }}
+          {% if add_form.students.errors %}<div class="field-error">{{ add_form.students.errors }}</div>{% endif %}
+        </div>
+        <div class="form-actions">
+          <button type="submit" name="add_submit" class="btn btn-primary">Qo‘shish</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h2>Chiqarish</h2></div>
+    <div class="panel-body">
+      <form method="post" class="form-card">
+        {% csrf_token %}
+        <div class="form-group">
+          <label>{{ remove_form.students.label }}</label>
+          {{ remove_form.students }}
+          {% if remove_form.students.errors %}<div class="field-error">{{ remove_form.students.errors }}</div>{% endif %}
+        </div>
+        <div class="form-actions">
+          <button type="submit" name="remove_submit" class="btn btn-danger">Chiqarish</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

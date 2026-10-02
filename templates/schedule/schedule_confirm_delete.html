@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Jadvalni o‘chirish{% endblock %}
+{% block page_title %}Jadvalni o‘chirish{% endblock %}
+{% block page_subtitle %}<p>{{ group.name }}</p>{% endblock %}
+
+{% block content %}
+<div class="panel">
+  <div class="panel-head"><h2>Tasdiqlash</h2></div>
+  <div class="panel-body">
+    <p>
+      <strong>{{ schedule.get_weekday_display }}</strong>
+      {{ schedule.start_time|time:"H:i" }}–{{ schedule.end_time|time:"H:i" }},
+      xona: {{ schedule.room.name }}
+    </p>
+    <p>Bu jadval qatorini o‘chirmoqchimisiz?</p>
+    <form method="post" class="form-actions">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">O‘chirish</button>
+      <a href="{% url 'schedule_create' group.pk %}" class="btn btn-secondary">Bekor</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

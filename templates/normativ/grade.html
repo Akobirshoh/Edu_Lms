@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Baholash{% endblock %}
+{% block page_title %}Normativni baholash{% endblock %}
+{% block page_subtitle %}<p>{{ student }} · {{ normativ.title }}</p>{% endblock %}
+
+{% block content %}
+<div class="panel">
+  <div class="panel-head"><h2>Javoblar va baholar</h2></div>
+  <div class="panel-body">
+    <form method="post" class="form-card">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+      <div class="field-error">{{ form.non_field_errors }}</div>
+      {% endif %}
+
+      {% for answer in answers %}
+      <div class="panel" style="margin-bottom: 0.75rem;">
+        <div class="panel-head">
+          <h3>{{ answer.question.order }}. {{ answer.question.text }}</h3>
+          <span class="badge badge-muted">Max: {{ answer.question.max_score }}</span>
+        </div>
+        <div class="panel-body">
+          <p>{{ answer.answer_text|linebreaksbr }}</p>
+          {% with pk=answer.pk|stringformat:"s" %}
+            {% with score_name="score_"|add:pk feedback_name="feedback_"|add:pk %}
+              {% for field in form %}
+                {% if field.name == score_name or field.name == feedback_name %}
+                <div class="form-group">
+                  <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                  {{ field }}
+                  {% if field.errors %}<div class="field-error">{{ field.errors }}</div>{% endif %}
+                </div>
+                {% endif %}
+              {% endfor %}
+            {% endwith %}
+          {% endwith %}
+        </div>
+      </div>
+      {% endfor %}
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Baholarni saqlash</button>
+        <a href="{% url 'teacher_queue' %}" class="btn btn-secondary">Navbat</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Xonani tahrirlash{% endblock %}
+{% block page_title %}Xonani tahrirlash{% endblock %}
+{% block page_subtitle %}<p>{{ room.name }}</p>{% endblock %}
+
+{% block content %}
+<div class="panel">
+  <div class="panel-head"><h2>Xona formasi</h2></div>
+  <div class="panel-body">
+    <form method="post" class="form-card">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+      <div class="field-error">{{ form.non_field_errors }}</div>
+      {% endif %}
+      {% for field in form %}
+      <div class="form-group">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}<div class="field-error">{{ field.errors }}</div>{% endif %}
+      </div>
+      {% endfor %}
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Saqlash</button>
+        <a href="{% url 'room_list' %}" class="btn btn-secondary">Bekor</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

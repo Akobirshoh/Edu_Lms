@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Davomat jurnali{% endblock %}
+{% block page_title %}Davomat jurnali{% endblock %}
+{% block page_subtitle %}<p>{{ group.name }}</p>{% endblock %}
+
+{% block content %}
+<div class="panel">
+  <div class="panel-head">
+    <h2>Jurnal</h2>
+    <a class="btn btn-sm btn-primary" href="{% url 'create_group_lesson' group.pk %}">Yangi dars</a>
+  </div>
+  <div class="panel-body">
+    {% if students and lessons %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>O‘quvchi</th>
+            {% for lesson in lessons %}
+            <th title="{{ lesson.lesson.title }}">
+              {{ lesson.date|date:"d.m" }}
+              <div><a href="{% url 'mark_attendance' lesson.pk %}">Davomat</a></div>
+            </th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for student in students %}
+          <tr>
+            <td>{{ student }}</td>
+            {% for lesson in lessons %}
+            <td>
+              {% for pair, status in matrix.items %}
+                {% if pair.0 == student.pk and pair.1 == lesson.pk %}
+                  {% if status == "present" %}
+                  <span class="badge badge-success">Keldi</span>
+                  {% elif status == "late" %}
+                  <span class="badge badge-warning">Kechikdi</span>
+                  {% elif status == "absent" %}
+                  <span class="badge badge-danger">Kelmadi</span>
+                  {% else %}
+                  <span class="badge badge-muted">{{ status }}</span>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+            </td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% elif not students %}
+    <p class="empty">O‘quvchilar yo‘q.</p>
+    {% else %}
+    <p class="empty">Hali dars qayd qilinmagan.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

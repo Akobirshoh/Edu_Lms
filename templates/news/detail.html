@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}{{ news.title }}{% endblock %}
+{% block page_title %}{{ news.title }}{% endblock %}
+{% block page_subtitle %}<p>{{ news.created_at|date:"d.m.Y H:i" }} · {{ news.author }}</p>{% endblock %}
+
+{% block content %}
+<div class="panel">
+  <div class="panel-head">
+    <h2>Yangilik</h2>
+    <div>
+      {% if news.author_id == request.user.id or request.user.role == 'admin' or request.user.is_superuser %}
+      <a class="btn btn-sm btn-secondary" href="{% url 'news_update' news.pk %}">Tahrirlash</a>
+      {% endif %}
+      <a class="btn btn-sm btn-secondary" href="{% url 'news_list' %}">Orqaga</a>
+    </div>
+  </div>
+  <div class="panel-body">
+    {% if news.image %}
+    <p><img src="{{ news.image.url }}" alt="{{ news.title }}" style="max-width: 100%; border-radius: 8px;"></p>
+    {% endif %}
+    {% if not news.is_published %}
+    <p><span class="badge badge-warning">Nashr qilinmagan</span></p>
+    {% endif %}
+    <div>{{ news.body|linebreaks }}</div>
+  </div>
+</div>
+{% endblock %}

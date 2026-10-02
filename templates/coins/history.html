@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Coin tarixi{% endblock %}
+{% block page_title %}Coin tarixi{% endblock %}
+{% block page_subtitle %}<p>Joriy balans: <strong>{{ balance }}</strong></p>{% endblock %}
+
+{% block content %}
+<div class="panel">
+  <div class="panel-head">
+    <h2>Tranzaksiyalar</h2>
+    <a class="btn btn-sm btn-secondary" href="{% url 'leaderboard' %}">Reyting</a>
+  </div>
+  <div class="panel-body">
+    {% if page_obj.object_list %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Sana</th>
+            <th>Miqdor</th>
+            <th>Sabab</th>
+            <th>Izoh</th>
+            <th>Kim</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for tx in page_obj %}
+          <tr>
+            <td>{{ tx.created_at|date:"d.m.Y H:i" }}</td>
+            <td>
+              {% if tx.amount > 0 %}
+              <span class="badge badge-success">+{{ tx.amount }}</span>
+              {% else %}
+              <span class="badge badge-danger">{{ tx.amount }}</span>
+              {% endif %}
+            </td>
+            <td>{{ tx.get_reason_display }}</td>
+            <td>{{ tx.comment|default:"—" }}</td>
+            <td>{{ tx.created_by|default:"—" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if page_obj.has_other_pages %}
+    <div class="form-actions">
+      {% if page_obj.has_previous %}
+      <a class="btn btn-sm btn-secondary" href="?page={{ page_obj.previous_page_number }}">Oldingi</a>
+      {% endif %}
+      <span class="badge badge-muted">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+      {% if page_obj.has_next %}
+      <a class="btn btn-sm btn-secondary" href="?page={{ page_obj.next_page_number }}">Keyingi</a>
+      {% endif %}
+    </div>
+    {% endif %}
+    {% else %}
+    <p class="empty">Tranzaksiyalar yo‘q.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}O‘qituvchi profili{% endblock %}
+{% block page_title %}O‘qituvchi profili{% endblock %}
+{% block page_subtitle %}<p>{{ teacher.user.get_full_name|default:teacher.user.username }}</p>{% endblock %}
+
+{% block content %}
+<div class="grid grid-2">
+  <div class="panel">
+    <div class="panel-head">
+      <h2>Ma’lumot</h2>
+      {% if request.user == teacher.user %}
+      <a class="btn btn-sm btn-secondary" href="{% url 'teacher_edit' %}">Tahrirlash</a>
+      {% endif %}
+    </div>
+    <div class="panel-body">
+      <div class="table-wrap">
+        <table>
+          <tbody>
+            <tr><th>Login</th><td>{{ teacher.user.username }}</td></tr>
+            <tr><th>Ism</th><td>{{ teacher.user.first_name|default:"—" }}</td></tr>
+            <tr><th>Familiya</th><td>{{ teacher.user.last_name|default:"—" }}</td></tr>
+            <tr><th>Telefon</th><td>{{ teacher.user.phone|default:"—" }}</td></tr>
+            <tr><th>Mutaxassislik</th><td>{{ teacher.specialization|default:"—" }}</td></tr>
+            <tr><th>Bio</th><td>{{ teacher.bio|default:"—" }}</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h2>Guruhlar</h2></div>
+    <div class="panel-body">
+      {% if groups %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Guruh</th>
+              <th>Kurs</th>
+              <th>O‘quvchilar</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for g in groups %}
+            <tr>
+              <td><a href="{% url 'group_detail' g.pk %}">{{ g.name }}</a></td>
+              <td>{{ g.course.title }}</td>
+              <td>{{ g.students_count }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="empty">Guruhlar yo‘q.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

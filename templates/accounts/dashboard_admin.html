@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Boshqaruv paneli{% endblock %}
+{% block page_title %}Boshqaruv paneli{% endblock %}
+{% block page_subtitle %}<p>Markaz holati va bugungi faoliyat</p>{% endblock %}
+
+{% block content %}
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-label">Kurslar</div>
+    <div class="stat-num">{{ courses_count }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Guruhlar</div>
+    <div class="stat-num">{{ groups_count }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">O‘qituvchilar</div>
+    <div class="stat-num">{{ teachers_count }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">O‘quvchilar</div>
+    <div class="stat-num">{{ students_count }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Xonalar</div>
+    <div class="stat-num">{{ rooms_count }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Kutilayotgan xaridlar</div>
+    <div class="stat-num">{{ pending_purchases }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Tekshirilmagan javoblar</div>
+    <div class="stat-num">{{ unchecked_answers }}</div>
+  </div>
+</div>
+
+<div class="grid grid-2" style="margin-top: 1.25rem;">
+  <div class="panel">
+    <div class="panel-head">
+      <h2>Bugungi jadval</h2>
+      <a class="btn btn-sm btn-secondary" href="{% url 'weekly_schedule' %}">Haftalik</a>
+    </div>
+    <div class="panel-body">
+      {% if today_schedules %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Vaqt</th>
+              <th>Guruh</th>
+              <th>Xona</th>
+              <th>O‘qituvchi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for s in today_schedules %}
+            <tr>
+              <td>{{ s.start_time|time:"H:i" }}–{{ s.end_time|time:"H:i" }}</td>
+              <td><a href="{% url 'group_detail' s.group.pk %}">{{ s.group.name }}</a></td>
+              <td>{{ s.room.name }}</td>
+              <td>{{ s.group.teacher }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="empty">Bugun dars yo‘q.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <h2>So‘nggi yangiliklar</h2>
+      <a class="btn btn-sm btn-secondary" href="{% url 'news_list' %}">Barchasi</a>
+    </div>
+    <div class="panel-body">
+      {% if recent_news %}
+      <div class="grid">
+        {% for news in recent_news %}
+        <a class="news-card card-link" href="{% url 'news_detail' news.pk %}">
+          <h3>{{ news.title }}</h3>
+          <p>{{ news.body|truncatewords:18 }}</p>
+          <small>{{ news.created_at|date:"d.m.Y" }}</small>
+        </a>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="empty">Yangiliklar yo‘q.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="form-actions" style="margin-top: 1rem;">
+  <a class="btn btn-primary" href="{% url 'course_create' %}">Kurs qo‘shish</a>
+  <a class="btn btn-secondary" href="{% url 'group_create' %}">Guruh yaratish</a>
+  <a class="btn btn-secondary" href="{% url 'register' %}">Foydalanuvchi</a>
+  <a class="btn btn-secondary" href="{% url 'teacher_queue' %}">Normativ navbati</a>
+  <a class="btn btn-secondary" href="{% url 'purchases_list' %}">Xaridlar</a>
+</div>
+{% endblock %}

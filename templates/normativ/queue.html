@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Tekshirish navbati{% endblock %}
+{% block page_title %}Tekshirish navbati{% endblock %}
+{% block page_subtitle %}<p>Tekshirilmagan normativ javoblari</p>{% endblock %}
+
+{% block content %}
+<div class="panel">
+  <div class="panel-head"><h2>Navbat</h2></div>
+  <div class="panel-body">
+    {% if queue %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>O‘quvchi</th>
+            <th>Normativ</th>
+            <th>Javoblar</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in queue %}
+          <tr>
+            <td>{{ item.student }}</td>
+            <td>{{ item.normativ.title }}</td>
+            <td><span class="badge badge-warning">{{ item.count }}</span></td>
+            <td>
+              <a class="btn btn-sm btn-primary" href="{% url 'grade_answers' item.normativ.pk item.student.pk %}">Baholash</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="empty">Tekshiriladigan javoblar yo‘q.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

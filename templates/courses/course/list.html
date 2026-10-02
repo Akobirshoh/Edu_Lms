@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Kurslar{% endblock %}
+{% block page_title %}Kurslar{% endblock %}
+{% block page_subtitle %}<p>Faol kurslar ro‘yxati</p>{% endblock %}
+
+{% block content %}
+<div class="panel">
+  <div class="panel-head">
+    <h2>Kurslar</h2>
+    {% if request.user.role == 'admin' or request.user.role == 'teacher' or request.user.is_superuser %}
+    <a class="btn btn-primary btn-sm" href="{% url 'course_create' %}">Yangi kurs</a>
+    {% endif %}
+  </div>
+  <div class="panel-body">
+    {% if courses %}
+    <div class="grid grid-3">
+      {% for course in courses %}
+      <a class="course-card card-link" href="{% url 'course_detail' course.pk %}">
+        <h3>{{ course.title }}</h3>
+        <p>{{ course.description|truncatewords:20|default:"Tavsif yo‘q" }}</p>
+        <p>
+          <span class="badge badge-muted">{{ course.modules_count }} modul</span>
+          <span class="badge badge-muted">{{ course.groups_count }} guruh</span>
+          <span class="badge badge-muted">{{ course.duration_months }} oy</span>
+        </p>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty">Kurslar hali yo‘q.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

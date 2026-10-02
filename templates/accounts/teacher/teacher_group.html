@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Mening guruhlarim{% endblock %}
+{% block page_title %}Mening guruhlarim{% endblock %}
+{% block page_subtitle %}<p>{{ teacher }}</p>{% endblock %}
+
+{% block content %}
+<div class="panel">
+  <div class="panel-head"><h2>Guruhlar</h2></div>
+  <div class="panel-body">
+    {% if groups %}
+    <div class="grid grid-2">
+      {% for g in groups %}
+      <div class="panel">
+        <div class="panel-head">
+          <h3><a href="{% url 'group_detail' g.pk %}">{{ g.name }}</a></h3>
+          <span class="badge badge-muted">{{ g.students_count }} o‘quvchi</span>
+        </div>
+        <div class="panel-body">
+          <p><strong>Kurs:</strong> {{ g.course.title }}</p>
+          <p><strong>Mentor:</strong> {{ g.mentor|default:"—" }}</p>
+          <div class="form-actions">
+            <a class="btn btn-sm btn-secondary" href="{% url 'group_journal' g.pk %}">Jurnal</a>
+            <a class="btn btn-sm btn-secondary" href="{% url 'create_group_lesson' g.pk %}">Dars</a>
+            <a class="btn btn-sm btn-secondary" href="{% url 'schedule_create' g.pk %}">Jadval</a>
+            <a class="btn btn-sm btn-secondary" href="{% url 'group_students_manage' g.pk %}">O‘quvchilar</a>
+          </div>
+          {% if g.memberships.all %}
+          <div class="table-wrap" style="margin-top: 0.75rem;">
+            <table>
+              <thead>
+                <tr><th>O‘quvchi</th></tr>
+              </thead>
+              <tbody>
+                {% for m in g.memberships.all %}
+                  {% if m.is_active %}
+                  <tr><td>{{ m.student }}</td></tr>
+                  {% endif %}
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty">Guruhlar topilmadi.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

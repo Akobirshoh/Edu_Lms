@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Profil{% endblock %}
+{% block page_title %}Profil{% endblock %}
+{% block page_subtitle %}<p>{{ profile_user.get_full_name|default:profile_user.username }}</p>{% endblock %}
+
+{% block content %}
+<div class="grid grid-2">
+  <div class="panel">
+    <div class="panel-head">
+      <h2>Shaxsiy ma’lumot</h2>
+      <a class="btn btn-sm btn-secondary" href="{% url 'profile_edit' %}">Tahrirlash</a>
+    </div>
+    <div class="panel-body">
+      {% if profile_user.avatar %}
+      <p><img src="{{ profile_user.avatar.url }}" alt="Avatar" style="max-width: 96px; border-radius: 50%;"></p>
+      {% endif %}
+      <div class="table-wrap">
+        <table>
+          <tbody>
+            <tr><th>Login</th><td>{{ profile_user.username }}</td></tr>
+            <tr><th>Ism</th><td>{{ profile_user.first_name|default:"—" }}</td></tr>
+            <tr><th>Familiya</th><td>{{ profile_user.last_name|default:"—" }}</td></tr>
+            <tr><th>Telefon</th><td>{{ profile_user.phone|default:"—" }}</td></tr>
+            <tr><th>Rol</th><td>{{ profile_user.get_role_display }}</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h2>Qo‘shimcha</h2></div>
+    <div class="panel-body">
+      {% if teacher_profile %}
+      <p><strong>Mutaxassislik:</strong> {{ teacher_profile.specialization|default:"—" }}</p>
+      <p><strong>Bio:</strong> {{ teacher_profile.bio|default:"—" }}</p>
+      <p><a class="btn btn-sm btn-secondary" href="{% url 'teacher_profile' %}">O‘qituvchi profili</a></p>
+      {% elif student_profile %}
+      <p><strong>Coin balans:</strong> <span class="badge badge-success">{{ coin_balance }}</span></p>
+      <p><strong>Tug‘ilgan sana:</strong> {{ student_profile.birth_date|date:"d.m.Y"|default:"—" }}</p>
+      <p><strong>Ota-ona telefoni:</strong> {{ student_profile.parent_phone|default:"—" }}</p>
+      <p>
+        <a class="btn btn-sm btn-secondary" href="{% url 'coin_history' %}">Coin tarixi</a>
+        <a class="btn btn-sm btn-secondary" href="{% url 'leaderboard' %}">Reyting</a>
+      </p>
+      {% else %}
+      <p class="empty">Qo‘shimcha profil ma’lumoti yo‘q.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

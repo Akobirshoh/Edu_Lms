@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Jadval{% endblock %}
+{% block page_title %}{% if schedule %}Jadvalni tahrirlash{% else %}Jadval qo‘shish{% endif %}{% endblock %}
+{% block page_subtitle %}<p>{{ group.name }}</p>{% endblock %}
+
+{% block content %}
+<div class="grid grid-2">
+  <div class="panel">
+    <div class="panel-head"><h2>Forma</h2></div>
+    <div class="panel-body">
+      <form method="post" class="form-card">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+        <div class="field-error">{{ form.non_field_errors }}</div>
+        {% endif %}
+        {% for field in form %}
+        <div class="form-group">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}<div class="field-error">{{ field.errors }}</div>{% endif %}
+        </div>
+        {% endfor %}
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Saqlash</button>
+          <a href="{% url 'group_detail' group.pk %}" class="btn btn-secondary">Guruh</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h2>Mavjud jadval</h2></div>
+    <div class="panel-body">
+      {% if schedules %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Kun</th>
+              <th>Vaqt</th>
+              <th>Xona</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for s in schedules %}
+            <tr>
+              <td>{{ s.get_weekday_display }}</td>
+              <td>{{ s.start_time|time:"H:i" }}–{{ s.end_time|time:"H:i" }}</td>
+              <td>{{ s.room.name }}</td>
+              <td>
+                <a class="btn btn-sm btn-secondary" href="{% url 'schedule_update' group.pk s.pk %}">Tahrirlash</a>
+                <a class="btn btn-sm btn-danger" href="{% url 'schedule_delete' group.pk s.pk %}">O‘chirish</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% elif schedule %}
+      <p class="empty">Tahrirlanayotgan qator: {{ schedule.get_weekday_display }} {{ schedule.start_time|time:"H:i" }}</p>
+      {% else %}
+      <p class="empty">Hali jadval yo‘q.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

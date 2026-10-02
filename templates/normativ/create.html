@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Normativ yaratish{% endblock %}
+{% block page_title %}Normativ yaratish{% endblock %}
+{% block page_subtitle %}<p>{{ lesson.title }}</p>{% endblock %}
+
+{% block content %}
+<div class="grid grid-2">
+  <div class="panel">
+    <div class="panel-head"><h2>Yangi normativ</h2></div>
+    <div class="panel-body">
+      <form method="post" class="form-card">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+        <div class="field-error">{{ form.non_field_errors }}</div>
+        {% endif %}
+        {% for field in form %}
+        <div class="form-group">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}<div class="field-error">{{ field.errors }}</div>{% endif %}
+        </div>
+        {% endfor %}
+
+        <h3>Savollar</h3>
+        {{ formset.management_form }}
+        {% if formset.non_form_errors %}
+        <div class="field-error">{{ formset.non_form_errors }}</div>
+        {% endif %}
+        {% for f in formset %}
+        <div class="panel" style="margin-bottom: 0.75rem;">
+          <div class="panel-body">
+            {% for field in f.visible_fields %}
+            <div class="form-group">
+              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+              {{ field }}
+              {% if field.errors %}<div class="field-error">{{ field.errors }}</div>{% endif %}
+            </div>
+            {% endfor %}
+            {% for field in f.hidden_fields %}{{ field }}{% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Saqlash</button>
+          <a href="{% url 'course_detail' lesson.module.course.pk %}" class="btn btn-secondary">Kurs</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h2>Mavjud normativlar</h2></div>
+    <div class="panel-body">
+      {% if normativs %}
+        {% for n in normativs %}
+        <div class="panel" style="margin-bottom: 0.75rem;">
+          <div class="panel-head"><h3>{{ n.title }}</h3></div>
+          <div class="panel-body">
+            <p>{{ n.description|default:"—" }}</p>
+            <ul>
+              {% for q in n.questions.all %}
+              <li>{{ q.order }}. {{ q.text }} <span class="badge badge-muted">{{ q.max_score }} ball</span></li>
+              {% empty %}
+              <li class="empty">Savollar yo‘q</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+      <p class="empty">Normativlar hali yo‘q.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

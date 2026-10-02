@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Normativ natijalari{% endblock %}
+{% block page_title %}Normativ natijalari{% endblock %}
+{% block page_subtitle %}<p>Topshirilgan javoblaringiz</p>{% endblock %}
+
+{% block content %}
+<div class="panel">
+  <div class="panel-head"><h2>Natijalar</h2></div>
+  <div class="panel-body">
+    {% if results %}
+    <div class="grid">
+      {% for item in results %}
+      <div class="panel">
+        <div class="panel-head">
+          <h3>{{ item.normativ.title }}</h3>
+          {% if item.pending %}
+          <span class="badge badge-warning">Tekshirilmoqda</span>
+          {% else %}
+          <span class="badge badge-success">{{ item.score }} / {{ item.max_score }}</span>
+          {% endif %}
+        </div>
+        <div class="panel-body">
+          <p><small>{{ item.date|date:"d.m.Y H:i" }}</small></p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Savol</th>
+                  <th>Ball</th>
+                  <th>Izoh</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for a in item.answers %}
+                <tr>
+                  <td>{{ a.question.text|truncatewords:15 }}</td>
+                  <td>
+                    {% if a.score != None %}{{ a.score }}{% else %}<span class="badge badge-warning">—</span>{% endif %}
+                  </td>
+                  <td>{{ a.feedback|default:"—" }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <p><a class="btn btn-sm btn-secondary" href="{% url 'student_submit' item.normativ.pk %}">Ko‘rish</a></p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty">Hali natijalar yo‘q.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

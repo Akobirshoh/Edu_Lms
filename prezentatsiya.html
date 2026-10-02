@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LMS o'quv loyihasi — reja va tasklar</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; color: #1f2430; background: #f5f6f8; line-height: 1.55; }
+  header.hero { background: #1e2a4a; color: #fff; padding: 48px 24px 40px; text-align: center; }
+  header.hero h1 { font-size: 30px; font-weight: 600; }
+  header.hero p { margin-top: 10px; color: #c3cbe0; max-width: 720px; margin-left: auto; margin-right: auto; }
+  nav.top { position: sticky; top: 0; background: #fff; border-bottom: 1px solid #e2e5ec; padding: 10px 16px; display: flex; flex-wrap: wrap; gap: 6px 14px; justify-content: center; z-index: 5; }
+  nav.top a { color: #33415e; text-decoration: none; font-size: 14px; padding: 4px 8px; border-radius: 6px; }
+  nav.top a:hover { background: #eef1f7; }
+  main { max-width: 1080px; margin: 0 auto; padding: 32px 20px 64px; }
+  section { margin-bottom: 48px; }
+  h2 { font-size: 22px; font-weight: 600; margin-bottom: 6px; padding-top: 12px; }
+  h3 { font-size: 17px; font-weight: 600; margin: 18px 0 8px; }
+  .sub { color: #5b6478; margin-bottom: 18px; font-size: 15px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
+  .appcard { background: #fff; border: 1px solid #e2e5ec; border-radius: 10px; padding: 14px 16px; }
+  .appcard h4 { font-size: 15px; margin-bottom: 6px; }
+  .appcard h4 code { background: #eef1f7; padding: 2px 7px; border-radius: 5px; font-size: 13px; }
+  .appcard p { font-size: 13.5px; color: #4a5468; }
+  table { border-collapse: collapse; width: 100%; background: #fff; font-size: 13.5px; }
+  th, td { border: 1px solid #e2e5ec; padding: 7px 10px; text-align: left; vertical-align: top; }
+  th { background: #eef1f7; font-weight: 600; }
+  td code, li code, p code { background: #eef1f7; padding: 1px 5px; border-radius: 4px; font-size: 12.5px; }
+  details { background: #fff; border: 1px solid #e2e5ec; border-radius: 10px; margin-bottom: 10px; }
+  details summary { cursor: pointer; padding: 12px 16px; font-weight: 600; font-size: 15px; }
+  details .inner { padding: 0 16px 14px; overflow-x: auto; }
+  .phase { background: #fff; border: 1px solid #e2e5ec; border-radius: 12px; padding: 20px 22px; margin-bottom: 26px; }
+  .phase-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; border-bottom: 2px solid #1e2a4a; padding-bottom: 10px; margin-bottom: 16px; }
+  .phase-head .num { background: #1e2a4a; color: #fff; border-radius: 8px; padding: 4px 12px; font-size: 14px; font-weight: 600; }
+  .phase-head h2 { padding: 0; }
+  .phase-head .cnt { color: #5b6478; font-size: 14px; }
+  .card { border: 1px solid #e2e5ec; border-radius: 10px; padding: 14px 16px; margin-bottom: 14px; background: #fafbfd; }
+  .card-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+  .tid { background: #2f57c7; color: #fff; font-size: 12.5px; font-weight: 600; padding: 3px 9px; border-radius: 6px; }
+  .card-head h4 { font-size: 15.5px; flex: 1; min-width: 200px; }
+  label.done { font-size: 12.5px; color: #5b6478; display: flex; align-items: center; gap: 5px; cursor: pointer; user-select: none; }
+  .card.checked { background: #eff7ef; border-color: #bcd9bc; }
+  .blk { margin: 8px 0; }
+  .blk b { font-size: 13px; color: #33415e; }
+  .blk p, .blk li { font-size: 13.5px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+  .tags span { background: #e8ecf7; color: #2f4070; font-size: 12px; padding: 2px 9px; border-radius: 20px; }
+  ul.mezon { list-style: none; margin: 4px 0 0; }
+  ul.mezon li { padding-left: 22px; position: relative; margin-bottom: 3px; }
+  ul.mezon li::before { content: "☐"; position: absolute; left: 2px; color: #2f57c7; }
+  pre { background: #23283a; color: #e8eaf2; border-radius: 8px; padding: 12px 14px; font-size: 12.5px; overflow-x: auto; margin-top: 8px; line-height: 1.5; }
+  .note { background: #fff8e8; border: 1px solid #f0dfae; border-radius: 10px; padding: 12px 16px; font-size: 14px; margin: 14px 0; }
+  footer { text-align: center; color: #5b6478; font-size: 13.5px; padding: 24px; }
+  @media print { nav.top, label.done { display: none; } body { background: #fff; } }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1>LMS o'quv loyihasi</h1>
+  <p>Real o'quv markaz tizimini birga quramiz. Modellar tayyor — qolgan hamma narsani sizlar yozasiz. Har bir task — bitta bilim, bitta natija.</p>
+</header>
+
+<nav class="top">
+  <a href="#maqsad">Maqsad</a>
+  <a href="#arxitektura">Arxitektura</a>
+  <a href="#modellar">Modellar</a>
+  <a href="#b1">1. Admin</a>
+  <a href="#b2">2. Auth</a>
+  <a href="#b3">3. Kurslar</a>
+  <a href="#b4">4. Guruhlar</a>
+  <a href="#b5">5. Jadval</a>
+  <a href="#b6">6. Jurnal</a>
+  <a href="#b7">7. Normativ</a>
+  <a href="#b8">8. Coin</a>
+  <a href="#b9">9. Dashboard</a>
+</nav>
+
+<main>
+
+<section id="maqsad">
+  <h2>Loyiha maqsadi</h2>
+  <p class="sub">Nima quramiz va qanday ishlaymiz</p>
+  <div class="grid">
+    <div class="appcard"><h4>Nima quramiz</h4><p>O'quv markaz uchun LMS: kurslar, guruhlar, darslar jadvali, davomat, normativ (dars savollari), coin tizimi va yangiliklar. Django template + forms, hech qanday tashqi frontend framework yo'q.</p></div>
+    <div class="appcard"><h4>Qanday ishlaymiz</h4><p>Loyiha 9 bosqich, 45 taskka bo'lingan. Task olasiz, kartadagi vazifani o'qiysiz, qabul mezonlari to'liq bajarilgandagina task yopiladi. Har bosqich boshida sahifalarning HTML mockup dizayni beriladi.</p></div>
+    <div class="appcard"><h4>Texnologiya</h4><p>Python 3.14, Django 6.0, SQLite, Pillow. Loyiha tayyor: <code>lms/</code> papkasi, 7 ta app, 18 ta model, migratsiyalar qilingan. Sizga faqat view, form, template va admin qismi qoldi.</p></div>
+  </div>
+  <div class="note"><b>Qoida:</b> kod yozishdan oldin tegishli modelni oching va fieldlarini o'qing. Taxmin qilmang — model nomlari, related_name lar va choices qiymatlari quyidagi ma'lumotnomada aniq yozilgan.</div>
+</section>
+
+<section id="arxitektura">
+  <h2>Arxitektura</h2>
+  <p class="sub">7 ta app, har biri bitta vazifaga javob beradi</p>
+  <div class="grid">
+    <div class="appcard"><h4><code>accounts</code></h4><p>CustomUser (role: admin, teacher, mentor, student), TeacherProfile, StudentProfile. TimeStampedModel abstract asosi ham shu yerda.</p></div>
+    <div class="appcard"><h4><code>courses</code></h4><p>Room, Course → Module → Lesson ierarxiyasi. Group (kursga, o'qituvchiga bog'liq), GroupStudent (a'zolik tarixi bilan).</p></div>
+    <div class="appcard"><h4><code>schedule</code></h4><p>GroupSchedule — haftalik shablon jadval. GroupLesson — real o'tilgan dars (jurnal yozuvi).</p></div>
+    <div class="appcard"><h4><code>attendance</code></h4><p>Attendance — o'tilgan dars bo'yicha keldi / kechikdi / kelmadi.</p></div>
+    <div class="appcard"><h4><code>normativ</code></h4><p>Normativ (darsga biriktiriladi) → NormativQuestion → NormativAnswer (o'qituvchi qo'lda baholaydi).</p></div>
+    <div class="appcard"><h4><code>coins</code></h4><p>CoinTransaction (+/- tarix), ShopItem, Purchase. Balans hech qayerda saqlanmaydi — tranzaksiyalardan hisoblanadi.</p></div>
+    <div class="appcard"><h4><code>news</code></h4><p>News — yangiliklar, chop etish belgisi bilan.</p></div>
+  </div>
+  <h3>Nega Lesson va GroupLesson alohida?</h3>
+  <p style="font-size:14.5px"><code>Lesson</code> — o'quv rejadagi mavzu, hamma guruh uchun bir xil. <code>GroupLesson</code> — konkret guruhda konkret sanada o'tilgan dars. Davomat mavzuga emas, sanaga bog'lanadi — shuning uchun ikkalasi alohida model.</p>
+</section>
+
+<section id="modellar">
+  <h2>Modellar ma'lumotnomasi</h2>
+  <p class="sub">Task bajarayotganda shu yerdan qarang. Har jadvalda: field, turi, izoh.</p>
+
+  <details>
+    <summary>accounts — CustomUser, TeacherProfile, StudentProfile</summary>
+    <div class="inner">
+      <h3>CustomUser (AbstractUser)</h3>
+      <table><tr><th>Field</th><th>Turi</th><th>Izoh</th></tr>
+      <tr><td>role</td><td>CharField(choices)</td><td><code>admin</code>, <code>teacher</code>, <code>mentor</code>, <code>student</code>; default <code>student</code></td></tr>
+      <tr><td>phone</td><td>CharField</td><td>blank bo'lishi mumkin</td></tr>
+      <tr><td>avatar</td><td>ImageField</td><td><code>avatars/</code> papkaga yuklanadi</td></tr></table>
+      <h3>TeacherProfile</h3>
+      <table><tr><th>Field</th><th>Turi</th><th>Izoh</th></tr>
+      <tr><td>user</td><td>OneToOne → CustomUser</td><td>related_name <code>teacher_profile</code></td></tr>
+      <tr><td>specialization</td><td>CharField</td><td></td></tr>
+      <tr><td>bio</td><td>TextField</td><td></td></tr></table>
+      <h3>StudentProfile</h3>
+      <table><tr><th>Field</th><th>Turi</th><th>Izoh</th></tr>
+      <tr><td>user</td><td>OneToOne → CustomUser</td><td>related_name <code>student_profile</code></td></tr>
+      <tr><td>birth_date</td><td>DateField</td><td>null bo'lishi mumkin</td></tr>
+      <tr><td>parent_phone</td><td>CharField</td><td></td></tr>
+      <tr><td>coin_balance</td><td>property</td><td>tranzaksiyalar yig'indisi, DB field emas</td></tr></table>
+      <p style="font-size:13px;margin-top:6px">Hamma model <code>TimeStampedModel</code> dan meros oladi: <code>created_at</code>, <code>updated_at</code> avtomatik bor.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>courses — Room, Course, Module, Lesson, Group, GroupStudent</summary>
+    <div class="inner">
+      <h3>Room</h3>
+      <table><tr><th>Field</th><th>Turi</th><th>Izoh</th></tr>
+      <tr><td>name</td><td>CharField(unique)</td><td></td></tr>
+      <tr><td>capacity</td><td>PositiveSmallIntegerField</td><td></td></tr></table>
+      <h3>Course</h3>
+      <table><tr><th>Field</th><th>Turi</th><th>Izoh</th></tr>
+      <tr><td>title, description</td><td>CharField, TextField</td><td></td></tr>
+      <tr><td>duration_months</td><td>PositiveSmallIntegerField</td><td></td></tr>
+      <tr><td>is_active</td><td>BooleanField</td><td>default True</td></tr></table>
+      <h3>Module / Lesson</h3>
+      <table><tr><th>Field</th><th>Turi</th><th>Izoh</th></tr>
+      <tr><td>Module.course</td><td>FK → Course</td><td>related_name <code>modules</code>; (course, order) unique</td></tr>
+      <tr><td>Lesson.module</td><td>FK → Module</td><td>related_name <code>lessons</code>; (module, order) unique</td></tr>
+      <tr><td>Lesson.content</td><td>TextField</td><td>dars matni</td></tr></table>
+      <h3>Group</h3>
+      <table><tr><th>Field</th><th>Turi</th><th>Izoh</th></tr>
+      <tr><td>course</td><td>FK → Course (PROTECT)</td><td>related_name <code>groups</code></td></tr>
+      <tr><td>teacher</td><td>FK → TeacherProfile (PROTECT)</td><td>related_name <code>groups</code></td></tr>
+      <tr><td>mentor</td><td>FK → CustomUser (SET_NULL)</td><td>ixtiyoriy, faqat role=mentor</td></tr>
+      <tr><td>name</td><td>CharField(unique)</td><td></td></tr>
+      <tr><td>start_date, is_active</td><td>DateField, BooleanField</td><td></td></tr>
+      <tr><td>students</td><td>M2M → StudentProfile</td><td>through <code>GroupStudent</code></td></tr></table>
+      <h3>GroupStudent (a'zolik)</h3>
+      <table><tr><th>Field</th><th>Turi</th><th>Izoh</th></tr>
+      <tr><td>group / student</td><td>FK / FK</td><td>related_name ikkalasida <code>memberships</code>; juftlik unique</td></tr>
+      <tr><td>joined_at, left_at</td><td>DateField</td><td>left_at — chiqib ketgan sana</td></tr>
+      <tr><td>is_active</td><td>BooleanField</td><td>guruhda hozir bormi</td></tr></table>
+    </div>
+  </details>
+
+  <details>
+    <summary>schedule — GroupSchedule, GroupLesson</summary>
+    <div class="inner">
+      <h3>GroupSchedule (haftalik shablon)</h3>
+      <table><tr><th>Field</th><th>Turi</th><th>Izoh</th></tr>
+      <tr><td>group</td><td>FK → Group</td><td>related_name <code>schedules</code></td></tr>
+      <tr><td>weekday</td><td>IntegerChoices 1–7</td><td>1=Dushanba ... 7=Yakshanba</td></tr>
+      <tr><td>start_time, end_time</td><td>TimeField</td><td></td></tr>
+      <tr><td>room</td><td>FK → Room (PROTECT)</td><td>related_name <code>schedules</code></td></tr></table>
+      <h3>GroupLesson (o'tilgan dars)</h3>
+      <table><tr><th>Field</th><th>Turi</th><th>Izoh</th></tr>
+      <tr><td>group</td><td>FK → Group</td><td>related_name <code>conducted_lessons</code></td></tr>
+      <tr><td>lesson</td><td>FK → Lesson (PROTECT)</td><td>qaysi mavzu o'tildi</td></tr>
+      <tr><td>date</td><td>DateField</td><td></td></tr>
+      <tr><td>teacher</td><td>FK → TeacherProfile</td><td>ixtiyoriy — o'rinbosar bo'lsa</td></tr></table>
+    </div>
+  </details>
+
+  <details>
+    <summary>attendance — Attendance</summary>
+    <div class="inner">
+      <table><tr><th>Field</th><th>Turi</th><th>Izoh</th></tr>
+      <tr><td>group_lesson</td><td>FK → GroupLesson</td><td>related_name <code>attendances</code></td></tr>
+      <tr><td>student</td><td>FK → StudentProfile</td><td>related_name <code>attendances</code>; (dars, o'quvchi) unique</td></tr>
+      <tr><td>status</td><td>CharField(choices)</td><td><code>present</code> / <code>late</code> / <code>absent</code></td></tr></table>
+    </div>
+  </details>
+
+  <details>
+    <summary>normativ — Normativ, NormativQuestion, NormativAnswer</summary>
+    <div class="inner">
+      <h3>Normativ</h3>
+      <table><tr><th>Field</th><th>Turi</th><th>Izoh</th></tr>
+      <tr><td>lesson</td><td>FK → Lesson</td><td>related_name <code>normativs</code></td></tr>
+      <tr><td>title, description</td><td>CharField, TextField</td><td></td></tr></table>
+      <h3>NormativQuestion</h3>
+      <table><tr><th>Field</th><th>Turi</th><th>Izoh</th></tr>
+      <tr><td>normativ</td><td>FK → Normativ</td><td>related_name <code>questions</code>; (normativ, order) unique</td></tr>
+      <tr><td>text</td><td>TextField</td><td>savol matni</td></tr>
+      <tr><td>max_score</td><td>PositiveSmallIntegerField</td><td>default 10</td></tr></table>
+      <h3>NormativAnswer</h3>
+      <table><tr><th>Field</th><th>Turi</th><th>Izoh</th></tr>
+      <tr><td>question / student</td><td>FK / FK</td><td>related_name <code>answers</code> / <code>normativ_answers</code>; juftlik unique</td></tr>
+      <tr><td>answer_text</td><td>TextField</td><td>o'quvchi javobi</td></tr>
+      <tr><td>score</td><td>PositiveSmallIntegerField</td><td>null = hali tekshirilmagan</td></tr>
+      <tr><td>feedback</td><td>TextField</td><td>o'qituvchi izohi</td></tr>
+      <tr><td>checked_by, checked_at</td><td>FK → CustomUser, DateTimeField</td><td>kim va qachon tekshirdi</td></tr>
+      <tr><td>is_checked</td><td>property</td><td><code>score is not None</code></td></tr></table>
+    </div>
+  </details>
+
+  <details>
+    <summary>coins — CoinTransaction, ShopItem, Purchase</summary>
+    <div class="inner">
+      <h3>CoinTransaction</h3>
+      <table><tr><th>Field</th><th>Turi</th><th>Izoh</th></tr>
+      <tr><td>student</td><td>FK → StudentProfile (PROTECT)</td><td>related_name <code>coin_transactions</code></td></tr>
+      <tr><td>amount</td><td>IntegerField</td><td>musbat = berildi, manfiy = yechildi</td></tr>
+      <tr><td>reason</td><td>CharField(choices)</td><td><code>attendance</code> / <code>normativ</code> / <code>purchase</code> / <code>manual</code></td></tr>
+      <tr><td>comment, created_by</td><td>CharField, FK → CustomUser</td><td></td></tr></table>
+      <h3>ShopItem</h3>
+      <table><tr><th>Field</th><th>Turi</th><th>Izoh</th></tr>
+      <tr><td>name, image</td><td>CharField, ImageField</td><td></td></tr>
+      <tr><td>price</td><td>PositiveIntegerField</td><td>coin hisobida</td></tr>
+      <tr><td>stock, is_active</td><td>PositiveSmallIntegerField, BooleanField</td><td></td></tr></table>
+      <h3>Purchase</h3>
+      <table><tr><th>Field</th><th>Turi</th><th>Izoh</th></tr>
+      <tr><td>student / item</td><td>FK (PROTECT) / FK (PROTECT)</td><td>related_name <code>purchases</code></td></tr>
+      <tr><td>status</td><td>CharField(choices)</td><td><code>pending</code> / <code>delivered</code></td></tr>
+      <tr><td>transaction</td><td>OneToOne → CoinTransaction</td><td>xaridning minus yozuvi, related_name <code>purchase</code></td></tr></table>
+    </div>
+  </details>
+
+  <details>
+    <summary>news — News</summary>
+    <div class="inner">
+      <table><tr><th>Field</th><th>Turi</th><th>Izoh</th></tr>
+      <tr><td>title, body, image</td><td>CharField, TextField, ImageField</td><td></td></tr>
+      <tr><td>author</td><td>FK → CustomUser (SET_NULL)</td><td>related_name <code>news</code></td></tr>
+      <tr><td>is_published</td><td>BooleanField</td><td>default False — qoralama</td></tr></table>
+    </div>
+  </details>
+</section>
+
+<section id="b1">
+  <div class="phase">
+    <div class="phase-head"><span class="num">1-bosqich</span><h2>Admin panel</h2><span class="cnt">7 task — isinish</span></div>
+    <p class="sub">Har app o'z adminini oladi. Maqsad: Django admin imkoniyatlarini o'rganish va tizimga ma'lumot kiritishni boshlash.</p>
+
+    <article class="card" data-task="B1.1">
+      <div class="card-head"><span class="tid">B1.1</span><h4>accounts adminini sozlash</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p><code>accounts/admin.py</code> da CustomUser, TeacherProfile, StudentProfile ni ro'yxatga oling. CustomUser uchun Django'ning tayyor <code>UserAdmin</code> klassidan meros oling va <code>role</code>, <code>phone</code> fieldlarini fieldsetsga qo'shing.</p></div>
+      <div class="tags"><span>admin.register</span><span>UserAdmin</span><span>list_display</span><span>list_filter</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Admin ro'yxatida username, full name, role, phone ko'rinadi</li>
+        <li>role bo'yicha filtr ishlaydi</li>
+        <li>User yaratish formasida role tanlash mumkin</li>
+        <li>TeacherProfile va StudentProfile ro'yxatga olingan</li>
+      </ul></div>
+      <pre>from django.contrib.auth.admin import UserAdmin
+
+@admin.register(CustomUser)
+class CustomUserAdmin(UserAdmin):
+    list_display = ['username', 'get_full_name', 'role', 'phone']
+    list_filter = ['role']
+    fieldsets = UserAdmin.fieldsets + (
+        ("Qo'shimcha", {'fields': ('role', 'phone', 'avatar')}),
+    )</pre>
+    </article>
+
+    <article class="card" data-task="B1.2">
+      <div class="card-head"><span class="tid">B1.2</span><h4>courses adminini sozlash</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>Room, Course, Module, Lesson, Group ni ro'yxatga oling. Module ichida Lesson lar inline ko'rinsin (TabularInline). Group sahifasida o'quvchilar <code>GroupStudent</code> inline orqali qo'shilsin — students M2M through model bilan ishlagani uchun oddiy usul ishlamaydi, aynan inline kerak.</p></div>
+      <div class="tags"><span>TabularInline</span><span>search_fields</span><span>M2M through</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Module sahifasida darslarni inline qo'shish mumkin</li>
+        <li>Group sahifasida o'quvchi qo'shish (joined_at bilan) ishlaydi</li>
+        <li>Course ro'yxatida title, duration_months, is_active ko'rinadi</li>
+        <li>Lesson ro'yxatida module bo'yicha filtr bor</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B1.3">
+      <div class="card-head"><span class="tid">B1.3</span><h4>schedule adminini sozlash</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>GroupSchedule va GroupLesson ni ro'yxatga oling. GroupSchedule ro'yxatida guruh, hafta kuni (nomi bilan), vaqt oralig'i va xona ko'rinsin.</p></div>
+      <div class="tags"><span>list_display</span><span>get_..._display</span><span>list_filter</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>weekday raqam emas, nom bo'lib ko'rinadi (Dushanba, ...)</li>
+        <li>weekday va room bo'yicha filtr ishlaydi</li>
+        <li>GroupLesson ro'yxatida group, lesson, date, teacher ko'rinadi</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B1.4">
+      <div class="card-head"><span class="tid">B1.4</span><h4>attendance adminini sozlash</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>Attendance ni ro'yxatga oling: list_display da o'quvchi, dars, status; status va sana bo'yicha filtr.</p></div>
+      <div class="tags"><span>list_display</span><span>list_filter</span><span>related lookup</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>status bo'yicha filtr ishlaydi</li>
+        <li>Dars sanasi bo'yicha filtr ishlaydi (<code>group_lesson__date</code>)</li>
+        <li>O'quvchi ismi bo'yicha qidiruv ishlaydi</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B1.5">
+      <div class="card-head"><span class="tid">B1.5</span><h4>normativ adminini sozlash</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>Normativ sahifasida savollar inline qo'shilsin. NormativAnswer ro'yxatida o'quvchi, savol, ball va tekshirilgan-tekshirilmaganligi ko'rinsin.</p></div>
+      <div class="tags"><span>TabularInline</span><span>readonly_fields</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Normativ ichida savollarni inline qo'shish mumkin</li>
+        <li>NormativAnswer da score null bo'lsa "tekshirilmagan" deb bilinadi</li>
+        <li>checked_by, checked_at adminda readonly</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B1.6">
+      <div class="card-head"><span class="tid">B1.6</span><h4>coins adminini sozlash</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>CoinTransaction, ShopItem, Purchase ni ro'yxatga oling. Tranzaksiya moliyaviy yozuv — adminda tahrirlab bo'lmasin (faqat ko'rish va yaratish).</p></div>
+      <div class="tags"><span>list_filter</span><span>has_change_permission</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>CoinTransaction ro'yxatida student, amount, reason, created_at ko'rinadi</li>
+        <li>Mavjud tranzaksiyani o'zgartirish mumkin emas</li>
+        <li>reason bo'yicha filtr ishlaydi</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B1.7">
+      <div class="card-head"><span class="tid">B1.7</span><h4>news adminini sozlash</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>News ni ro'yxatga oling. is_published ro'yxatning o'zida o'zgartirilsin (list_editable). Saqlashda author avtomatik joriy admin bo'lsin (<code>save_model</code> ni override qiling).</p></div>
+      <div class="tags"><span>list_editable</span><span>save_model</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Ro'yxatdan turib is_published ni o'zgartirish mumkin</li>
+        <li>Yangi yangilik yaratilganda author avtomatik to'ladi</li>
+        <li>title bo'yicha qidiruv ishlaydi</li>
+      </ul></div>
+    </article>
+  </div>
+</section>
+
+<section id="b2">
+  <div class="phase">
+    <div class="phase-head"><span class="num">2-bosqich</span><h2>Auth va asos</h2><span class="cnt">5 task — mockup beriladi</span></div>
+    <p class="sub">Sayt skeleti: umumiy shablon, kirish-chiqish, rolga qarab yo'naltirish.</p>
+
+    <article class="card" data-task="B2.1">
+      <div class="card-head"><span class="tid">B2.1</span><h4>base.html va navbar</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>Loyiha ildizida <code>templates/</code> papka oching (settings.py da <code>TEMPLATES[0]['DIRS']</code> ga qo'shing), <code>base.html</code> yozing: navbar, xabarlar bloki (messages framework), <code>{% block content %}</code>. Static papka sozlang, bitta <code>style.css</code> ulang. Dizayn — berilgan mockup bo'yicha.</p></div>
+      <div class="tags"><span>template inheritance</span><span>static files</span><span>messages</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>base.html dan meros olgan sahifa navbar bilan ochiladi</li>
+        <li>CSS static orqali yuklanadi (<code>{% load static %}</code>)</li>
+        <li>Navbar da login holatiga qarab "Kirish" yoki username + "Chiqish" ko'rinadi</li>
+        <li>messages bloki xabar bo'lsa chiqadi</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B2.2">
+      <div class="card-head"><span class="tid">B2.2</span><h4>Login va logout</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>Django'ning tayyor <code>LoginView</code> / <code>LogoutView</code> laridan foydalaning. <code>registration/login.html</code> shablonini yozing. settings.py da <code>LOGIN_URL</code>, <code>LOGIN_REDIRECT_URL</code>, <code>LOGOUT_REDIRECT_URL</code> ni sozlang.</p></div>
+      <div class="tags"><span>auth views</span><span>settings</span><span>CSRF</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Noto'g'ri parolda forma xato ko'rsatadi</li>
+        <li>Logout tugmasi POST forma orqali ishlaydi (Django 5+ da GET logout ishlamaydi!)</li>
+        <li>Login qilmagan foydalanuvchi himoyalangan sahifaga kirsa login sahifasiga otadi</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B2.3">
+      <div class="card-head"><span class="tid">B2.3</span><h4>Rolga qarab yo'naltirish</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p><code>home</code> view yozing: login qilingan foydalanuvchini roliga qarab yo'naltiradi — student → student dashboard, teacher/mentor → teacher dashboard, admin → /admin/. Dashboard sahifalari hozircha oddiy "salom" sahifa bo'lsin (9-bosqichda to'ldiriladi).</p></div>
+      <div class="tags"><span>redirect</span><span>request.user</span><span>url name</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>student login qilsa student sahifaga tushadi</li>
+        <li>teacher login qilsa teacher sahifaga tushadi</li>
+        <li>Login qilmagan user home ga kirsa login ga otadi</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B2.4">
+      <div class="card-head"><span class="tid">B2.4</span><h4>role_required dekoratori</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p><code>accounts/decorators.py</code> da <code>role_required(*roles)</code> dekoratorini yozing: login bo'lmagan userni login ga yo'naltiradi, roli mos kelmaganga 403 qaytaradi. Keyingi barcha bosqichlarda shu dekorator ishlatiladi.</p></div>
+      <div class="tags"><span>decorator</span><span>functools.wraps</span><span>403</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li><code>@role_required('teacher')</code> qo'yilgan viewga student kirsa 403 oladi</li>
+        <li>Login qilmagan user login sahifasiga otadi</li>
+        <li>Bir nechta rol berish mumkin: <code>@role_required('teacher', 'admin')</code></li>
+      </ul></div>
+      <pre>from functools import wraps
+from django.http import HttpResponseForbidden
+from django.shortcuts import redirect
+
+def role_required(*roles):
+    def decorator(view_func):
+        @wraps(view_func)
+        def wrapper(request, *args, **kwargs):
+            if not request.user.is_authenticated:
+                return redirect('login')
+            if request.user.role not in roles:
+                return HttpResponseForbidden("Ruxsat yo'q")
+            return view_func(request, *args, **kwargs)
+        return wrapper
+    return decorator</pre>
+    </article>
+
+    <article class="card" data-task="B2.5">
+      <div class="card-head"><span class="tid">B2.5</span><h4>Profil sahifasi</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p><code>/profile/</code> sahifasi: user ma'lumotlari, avatari, roli. Student bo'lsa StudentProfile ma'lumotlari va coin balansi, teacher bo'lsa TeacherProfile ma'lumotlari ham chiqsin. Telefon va avatarni tahrirlash formasi qo'shing.</p></div>
+      <div class="tags"><span>ModelForm</span><span>request.FILES</span><span>hasattr</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Har rol o'z profilini ko'radi, student balansini ham ko'radi</li>
+        <li>Avatar yuklash ishlaydi (formda <code>enctype="multipart/form-data"</code>)</li>
+        <li>Profili yo'q userda sahifa yiqilmaydi (hasattr tekshiruvi)</li>
+      </ul></div>
+    </article>
+  </div>
+</section>
+
+<section id="b3">
+  <div class="phase">
+    <div class="phase-head"><span class="num">3-bosqich</span><h2>Kurslar</h2><span class="cnt">6 task — mockup beriladi</span></div>
+    <p class="sub">Birinchi to'liq CRUD. Barcha viewlar <code>@role_required('teacher', 'admin')</code> bilan himoyalanadi (ro'yxat va detail hammaga ochiq bo'lishi mumkin).</p>
+    <div class="note"><b>URL sxema:</b> <code>/courses/</code> (course_list), <code>/courses/&lt;pk&gt;/</code> (course_detail), <code>/courses/create/</code>, <code>/courses/&lt;pk&gt;/update/</code>, <code>/courses/&lt;pk&gt;/delete/</code>. <code>courses/urls.py</code> alohida fayl, <code>config/urls.py</code> ga include qilinadi.</div>
+
+    <article class="card" data-task="B3.1">
+      <div class="card-head"><span class="tid">B3.1</span><h4>course_list sahifasi</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>Aktiv kurslar ro'yxati kartochkalarda: nomi, davomiyligi, modullar soni, guruhlar soni. Har kartochka course_detail ga olib boradi.</p></div>
+      <div class="tags"><span>function view</span><span>annotate Count</span><span>url include</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Faqat is_active=True kurslar chiqadi</li>
+        <li>Modullar soni annotate bilan olinadi (har kurs uchun alohida query emas)</li>
+        <li>Kurs bo'lmasa "hozircha kurs yo'q" xabari chiqadi</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B3.2">
+      <div class="card-head"><span class="tid">B3.2</span><h4>course_detail sahifasi</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>Kurs haqida to'liq: tavsif, modullar ro'yxati, har modul ichida darslari (accordion yoki ochiq ro'yxat), kursdagi guruhlar. <code>get_object_or_404</code> ishlating. N+1 muammosini <code>prefetch_related('modules__lessons')</code> bilan yeching.</p></div>
+      <div class="tags"><span>get_object_or_404</span><span>prefetch_related</span><span>nested loop</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Mavjud bo'lmagan pk da 404 qaytadi</li>
+        <li>Modullar order bo'yicha, darslar order bo'yicha chiqadi</li>
+        <li>Sahifa uchun SQL querylar soni modul soniga bog'liq emas</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B3.3">
+      <div class="card-head"><span class="tid">B3.3</span><h4>course_create — forma va validatsiya</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p><code>courses/forms.py</code> da <code>CourseForm</code> (ModelForm) yozing: title, description, duration_months, is_active. Validatsiya: <code>clean_duration_months</code> — 1 dan 24 gacha; <code>clean_title</code> — shu nomli aktiv kurs borligini tekshiring. View GET da bo'sh forma, POST da saqlab detail ga redirect qiladi, messages bilan "Kurs yaratildi" chiqadi.</p></div>
+      <div class="tags"><span>ModelForm</span><span>clean_field</span><span>ValidationError</span><span>PRG pattern</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>duration_months=30 kiritilsa forma xato ko'rsatadi, sahifa yiqilmaydi</li>
+        <li>Takror nomda tushunarli xato chiqadi</li>
+        <li>Muvaffaqiyatda redirect + xabar (refresh da qayta saqlanmaydi)</li>
+        <li>Faqat teacher/admin kira oladi</li>
+      </ul></div>
+      <pre>class CourseForm(forms.ModelForm):
+    class Meta:
+        model = Course
+        fields = ['title', 'description', 'duration_months', 'is_active']
+
+    def clean_duration_months(self):
+        value = self.cleaned_data['duration_months']
+        if not 1 &lt;= value &lt;= 24:
+            raise forms.ValidationError("Davomiylik 1-24 oy oralig'ida bo'lishi kerak")
+        return value</pre>
+    </article>
+
+    <article class="card" data-task="B3.4">
+      <div class="card-head"><span class="tid">B3.4</span><h4>course_update sahifasi</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>O'sha CourseForm ni <code>instance=</code> bilan ishlating. Takror nom tekshiruvida o'zini hisobga olmaslik kerak (<code>exclude(pk=self.instance.pk)</code>) — aks holda kursni o'z nomi bilan saqlab bo'lmaydi.</p></div>
+      <div class="tags"><span>instance</span><span>exclude self</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Forma mavjud qiymatlar bilan to'ldirilgan ochiladi</li>
+        <li>Nomini o'zgartirmasdan saqlash xato bermaydi</li>
+        <li>Saqlangach detail ga qaytadi</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B3.5">
+      <div class="card-head"><span class="tid">B3.5</span><h4>course_delete — tasdiqlash bilan</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>GET da "rostdan o'chirasizmi?" sahifasi, POST da o'chirish. Muhim: kursda guruh bo'lsa FK PROTECT tufayli <code>ProtectedError</code> chiqadi — buni try/except bilan ushlab, foydalanuvchiga tushunarli xabar ko'rsating.</p></div>
+      <div class="tags"><span>confirm page</span><span>ProtectedError</span><span>try/except</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>GET so'rov hech narsani o'chirmaydi</li>
+        <li>Guruhi bor kursni o'chirishga urinilsa xabar chiqadi, sahifa yiqilmaydi</li>
+        <li>Guruhi yo'q kurs o'chadi va ro'yxatga qaytadi</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B3.6">
+      <div class="card-head"><span class="tid">B3.6</span><h4>Modul va dars boshqaruvi</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>course_detail ichidan modul qo'shish (<code>/courses/&lt;pk&gt;/modules/add/</code>) va modul ichiga dars qo'shish. ModuleForm da order avtomatik taklif qilinsin (oxirgi order + 1). Unique constraint buzilsa (bir xil order) forma xatosi chiqsin — buni <code>validate_unique</code> emas, clean da o'zingiz tekshiring.</p></div>
+      <div class="tags"><span>initial</span><span>clean</span><span>unique constraint</span><span>related create</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Modul formasi ochilganda order avtomatik to'lgan</li>
+        <li>Band order kiritilsa tushunarli xato chiqadi (500 emas)</li>
+        <li>Dars qo'shilgach kurs sahifasiga qaytadi va yangi dars ko'rinadi</li>
+      </ul></div>
+    </article>
+  </div>
+</section>
+
+<section id="b4">
+  <div class="phase">
+    <div class="phase-head"><span class="num">4-bosqich</span><h2>Guruhlar va xonalar</h2><span class="cnt">5 task — mockup beriladi</span></div>
+    <p class="sub">O'quv markazning tirik qismi: guruh ochish, o'quvchi qo'shish-chiqarish.</p>
+
+    <article class="card" data-task="B4.1">
+      <div class="card-head"><span class="tid">B4.1</span><h4>Room CRUD</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>Xonalar ro'yxati + yaratish + tahrirlash bitta sahifada: ro'yxat tepasida forma. 3-bosqichda o'rgangan pattern'ni mustaqil qo'llash.</p></div>
+      <div class="tags"><span>CRUD takror</span><span>unique field xatosi</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Takror nomli xona yaratib bo'lmaydi (forma xatosi)</li>
+        <li>Ro'yxatda har xona nomi va sig'imi ko'rinadi</li>
+        <li>Faqat teacher/admin kiradi</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B4.2">
+      <div class="card-head"><span class="tid">B4.2</span><h4>Group CRUD</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>Guruhlar ro'yxati (kursi, o'qituvchisi, o'quvchilar soni bilan) va yaratish/tahrirlash formasi. Formada course faqat aktivlardan, mentor faqat role=mentor userlardan tanlansin (queryset ni formaning <code>__init__</code> ida chekleng).</p></div>
+      <div class="tags"><span>ModelChoiceField queryset</span><span>form __init__</span><span>annotate</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Kurs tanlovida faqat aktiv kurslar chiqadi</li>
+        <li>Mentor tanlovida faqat mentorlar chiqadi</li>
+        <li>Ro'yxatda aktiv o'quvchilar soni to'g'ri (faqat is_active a'zoliklar)</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B4.3">
+      <div class="card-head"><span class="tid">B4.3</span><h4>group_detail sahifasi</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>Guruh sahifasi: kursi, o'qituvchisi, mentori, jadval kunlari, aktiv o'quvchilar ro'yxati (qo'shilgan sanasi bilan). O'quvchilarni <code>memberships</code> orqali oling (<code>select_related('student__user')</code> bilan).</p></div>
+      <div class="tags"><span>select_related</span><span>through model o'qish</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Faqat aktiv a'zolar chiqadi, chiqib ketganlar alohida (yoki ko'rinmaydi)</li>
+        <li>Har o'quvchi qatorida joined_at ko'rinadi</li>
+        <li>Querylar soni o'quvchi soniga bog'liq emas</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B4.4">
+      <div class="card-head"><span class="tid">B4.4</span><h4>Guruhga o'quvchi qo'shish</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>group_detail da "o'quvchi qo'shish" formasi: tanlovda faqat shu guruhda YO'Q studentlar chiqsin (<code>exclude(memberships__group=group, memberships__is_active=True)</code>). Qo'shilganda GroupStudent yoziladi (joined_at = bugun). Ilgari chiqib ketgan o'quvchi qayta qo'shilsa — yangi yozuv emas, eskisini aktivlashtirish.</p></div>
+      <div class="tags"><span>exclude lookup</span><span>get_or_create</span><span>edge case</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Guruhdagi o'quvchi tanlovda chiqmaydi</li>
+        <li>Qayta qo'shishda unique constraint xatosi chiqmaydi (eski yozuv aktivlashadi)</li>
+        <li>Qo'shilgach ro'yxat yangilanadi</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B4.5">
+      <div class="card-head"><span class="tid">B4.5</span><h4>O'quvchini guruhdan chiqarish</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>Har o'quvchi qatorida "chiqarish" tugmasi (POST forma). O'chirish YO'Q: <code>is_active=False</code>, <code>left_at=bugun</code>. Tarix saqlanadi — o'quvchi qachon kelib qachon ketgani ko'rinadi.</p></div>
+      <div class="tags"><span>soft delete</span><span>POST action</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Chiqarilgan o'quvchi aktivlar ro'yxatidan yo'qoladi</li>
+        <li>GroupStudent yozuvi bazadan o'chmaydi, left_at to'ladi</li>
+        <li>GET so'rov bilan chiqarib bo'lmaydi</li>
+      </ul></div>
+    </article>
+  </div>
+</section>
+
+<section id="b5">
+  <div class="phase">
+    <div class="phase-head"><span class="num">5-bosqich</span><h2>Darslar jadvali</h2><span class="cnt">4 task — mockup beriladi</span></div>
+    <p class="sub">Haftalik jadval va eng qiziq validatsiya: xona to'qnashuvi.</p>
+
+    <article class="card" data-task="B5.1">
+      <div class="card-head"><span class="tid">B5.1</span><h4>GroupSchedule CRUD</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>Guruh sahifasidan jadval qatori qo'shish/o'chirish: hafta kuni, boshlanish-tugash vaqti, xona. Oddiy tekshiruv formada: end_time start_time dan keyin bo'lishi shart (<code>clean</code> metodida, ikkala fieldga tegishli xato).</p></div>
+      <div class="tags"><span>TimeField</span><span>form clean</span><span>add_error</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>16:00–14:00 kiritilsa forma xato beradi</li>
+        <li>Jadval qatorlari weekday tartibida chiqadi</li>
+        <li>Qatorni o'chirish POST bilan ishlaydi</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B5.2">
+      <div class="card-head"><span class="tid">B5.2</span><h4>Xona to'qnashuvi validatsiyasi</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>Eng muhim task: bir xonada bir vaqtda ikki guruh o'qiy olmaydi. Formaning <code>clean</code> metodida tekshiring. Ikki interval kesishish sharti: <code>start1 &lt; end2 AND start2 &lt; end1</code>. Tahrirlashda o'zini exclude qilishni unutmang. Xuddi shu tekshiruvni guruh uchun ham qiling (bitta guruh bir vaqtda ikki joyda bo'lolmaydi).</p></div>
+      <div class="tags"><span>interval overlap</span><span>Q lookup</span><span>exclude self</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Band xona-vaqtga jadval qo'shib bo'lmaydi, xatoda qaysi guruh bandligi yoziladi</li>
+        <li>Vaqtlar chetma-chet bo'lsa (14:00-16:00 va 16:00-18:00) xato BERMAYDI</li>
+        <li>Mavjud qatorni tahrirlash o'z-o'ziga to'qnashuv bermaydi</li>
+      </ul></div>
+      <pre>conflict = GroupSchedule.objects.filter(
+    room=room, weekday=weekday,
+    start_time__lt=end_time, end_time__gt=start_time,
+).exclude(pk=self.instance.pk).first()
+if conflict:
+    raise forms.ValidationError(
+        f'Bu xona band: {conflict.group} '
+        f'({conflict.start_time:%H:%M}-{conflict.end_time:%H:%M})'
+    )</pre>
+    </article>
+
+    <article class="card" data-task="B5.3">
+      <div class="card-head"><span class="tid">B5.3</span><h4>Haftalik jadval sahifasi</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p><code>/schedule/</code> — butun markaz jadvali: 7 kun ustun (yoki qator), har katakda shu kungi darslar vaqt tartibida (guruh, vaqt, xona). Ma'lumotni view da kunlar bo'yicha dict ga guruhlab bering — template da minimal logika.</p></div>
+      <div class="tags"><span>ma'lumot guruhlash</span><span>dict template'da</span><span>select_related</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Har kun ustunida faqat shu kun darslari, vaqt tartibida</li>
+        <li>Dars yo'q kun bo'sh holatda chiroyli ko'rinadi</li>
+        <li>Har dars qatorida guruh nomi, vaqt, xona bor</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B5.4">
+      <div class="card-head"><span class="tid">B5.4</span><h4>Bugungi darslar bloki</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>Qayta ishlatiladigan qism: bugungi weekday bo'yicha darslar ro'yxati. Buni <code>inclusion tag</code> qilib yozing (<code>schedule/templatetags/</code>) — keyin bosh sahifada ham, dashboardlarda ham ishlatiladi.</p></div>
+      <div class="tags"><span>inclusion tag</span><span>date.isoweekday</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li><code>{% bugungi_darslar %}</code> istalgan sahifada ishlaydi</li>
+        <li>Python'ning <code>isoweekday()</code> (1=Dushanba) bizning Weekday bilan mos tushadi</li>
+        <li>Bugun dars bo'lmasa "bugun dars yo'q" chiqadi</li>
+      </ul></div>
+    </article>
+  </div>
+</section>
+
+<section id="b6">
+  <div class="phase">
+    <div class="phase-head"><span class="num">6-bosqich</span><h2>Jurnal va davomat</h2><span class="cnt">4 task — mockup beriladi</span></div>
+    <p class="sub">O'qituvchi darsni qayd qiladi, davomat belgilaydi, coin avtomatik yoziladi.</p>
+
+    <article class="card" data-task="B6.1">
+      <div class="card-head"><span class="tid">B6.1</span><h4>Dars o'tildi — GroupLesson yaratish</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>group_detail da "dars qayd qilish" formasi: sana (default bugun) va mavzu. Mavzu tanlovida FAQAT shu guruh kursining darslari chiqsin (<code>Lesson.objects.filter(module__course=group.course)</code>). Yaratilgach davomat sahifasiga o'tadi.</p></div>
+      <div class="tags"><span>queryset filter</span><span>span relation</span><span>redirect with pk</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Boshqa kurs darsi tanlovda chiqmaydi</li>
+        <li>teacher fieldi bo'sh qolsa guruh o'qituvchisi deb tushuniladi</li>
+        <li>Yaratilgach to'g'ridan-to'g'ri davomat belgilashga o'tadi</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B6.2">
+      <div class="card-head"><span class="tid">B6.2</span><h4>Davomat belgilash sahifasi</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>Dars uchun jadval: har aktiv o'quvchi qatorida uchta radio (keldi / kechikdi / kelmadi). Bitta "saqlash" tugmasi hammasini yozadi. Radio nomi <code>status_&lt;student_id&gt;</code> ko'rinishida, view da POST dan o'qib har o'quvchiga <code>update_or_create</code> qilinadi. Qayta ochilsa mavjud statuslar belgilangan turadi.</p></div>
+      <div class="tags"><span>POST parsing</span><span>update_or_create</span><span>radio group</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Bitta saqlash hamma o'quvchiga yoziladi</li>
+        <li>Qayta ochilganda oldingi belgilar ko'rinadi</li>
+        <li>Belgilanmagan o'quvchi bo'lsa xato chiqadi (hammasi majburiy)</li>
+        <li>Faqat shu guruh o'qituvchisi yoki admin kira oladi</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B6.3">
+      <div class="card-head"><span class="tid">B6.3</span><h4>Davomat uchun coin</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>Davomat BIRINCHI marta saqlanganda: keldi = +5, kechikdi = +2, kelmadi = 0 coin. <code>update_or_create</code> ning <code>created</code> qiymatidan foydalaning — qayta tahrirlashda coin QAYTA yozilmasin. CoinTransaction: reason=<code>attendance</code>, comment da dars nomi va sanasi, created_by = joriy user. Signal ishlatmang — coin yozish davomat saqlash viewining ichida ochiq-oydin tursin.</p></div>
+      <div class="tags"><span>created flag</span><span>idempotentlik</span><span>biznes logika</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Keldi belgilangan o'quvchi balansi +5 ga oshadi</li>
+        <li>Davomatni qayta saqlash coin bermaydi</li>
+        <li>Tranzaksiya comment idan qaysi dars ekani bilinadi</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B6.4">
+      <div class="card-head"><span class="tid">B6.4</span><h4>Guruh jurnali</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>Jadval ko'rinishi: qatorlar — o'quvchilar, ustunlar — o'tilgan darslar (sanasi bilan), kataklarda status belgisi (✓ / L / ✗). View da <code>{(student_id, group_lesson_id): status}</code> dict tayyorlang — template ichida query qilinmasin.</p></div>
+      <div class="tags"><span>matritsa tayyorlash</span><span>dict lookup template'da</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Hamma o'tilgan dars ustunda, hamma aktiv o'quvchi qatorda</li>
+        <li>Belgilanmagan katak bo'sh ko'rinadi (xato emas)</li>
+        <li>Querylar soni: darslar + davomatlar uchun 2-3 ta, katak soniga bog'liq emas</li>
+      </ul></div>
+    </article>
+  </div>
+</section>
+
+<section id="b7">
+  <div class="phase">
+    <div class="phase-head"><span class="num">7-bosqich</span><h2>Normativ</h2><span class="cnt">5 task — mockup beriladi</span></div>
+    <p class="sub">Dars savollari: o'quvchi yozma javob beradi, o'qituvchi baholaydi, coin beriladi.</p>
+
+    <article class="card" data-task="B7.1">
+      <div class="card-head"><span class="tid">B7.1</span><h4>Normativ va savollar boshqaruvi</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>Teacher uchun: darsga normativ ochish va savollar qo'shish (matn, max_score, order avtotaklif). Dars sahifasi kontekstida ishlansin: <code>/lessons/&lt;pk&gt;/normativ/</code>.</p></div>
+      <div class="tags"><span>nested resource</span><span>forma takror</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Darsdan normativga o'tish va savol qo'shish ishlaydi</li>
+        <li>Savollar order tartibida ko'rinadi</li>
+        <li>Faqat teacher/admin kiradi</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B7.2">
+      <div class="card-head"><span class="tid">B7.2</span><h4>Normativ topshirish (student)</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>Student normativni ochadi: har savol ostida textarea, bitta "topshirish" tugmasi. Har savolga NormativAnswer yoziladi. Allaqachon topshirgan savollari readonly ko'rinadi (unique constraint bor — qayta topshirib bo'lmaydi). Studentning shu kurs guruhida ekanini tekshiring.</p></div>
+      <div class="tags"><span>bulk create from POST</span><span>ownership tekshiruvi</span><span>readonly holat</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Hamma savolga javob majburiy, bo'sh textarea da xato</li>
+        <li>Qayta topshirishga urinishda formalar chiqmaydi, javoblari ko'rinadi</li>
+        <li>Boshqa kurs studenti bu normativga kira olmaydi (403)</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B7.3">
+      <div class="card-head"><span class="tid">B7.3</span><h4>Tekshirish navbati (teacher)</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p><code>/normativ/checking/</code> — tekshirilmagan javoblar ro'yxati (<code>score__isnull=True</code>), o'quvchi va normativ bo'yicha guruhlab. Teacher faqat O'Z guruhlari o'quvchilarining javoblarini ko'radi.</p></div>
+      <div class="tags"><span>isnull lookup</span><span>teacher scoping</span><span>regroup</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Faqat tekshirilmaganlar chiqadi</li>
+        <li>Teacher boshqa o'qituvchi guruhining javobini ko'rmaydi</li>
+        <li>Har qatordan baholash sahifasiga o'tiladi</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B7.4">
+      <div class="card-head"><span class="tid">B7.4</span><h4>Baholash sahifasi</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>Bitta o'quvchining bitta normativ bo'yicha barcha javoblari: savol, javob matni, ball kiritish maydoni (0 dan max_score gacha — validatsiya!), feedback. Saqlashda checked_by = joriy user, checked_at = hozir. Baholangach umumiy ball bo'yicha coin yoziladi: masalan yig'ilgan ball foizidan (80%+ = +10, 50-79% = +5, aks holda 0). Bir normativ uchun coin bir marta beriladi.</p></div>
+      <div class="tags"><span>max_score validatsiya</span><span>timezone.now</span><span>foiz hisoblash</span><span>idempotentlik</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>max_score dan katta ball kiritib bo'lmaydi</li>
+        <li>Saqlangach checked_by/checked_at to'ladi va javob navbatdan yo'qoladi</li>
+        <li>Coin faqat bir marta yoziladi (reason=<code>normativ</code>)</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B7.5">
+      <div class="card-head"><span class="tid">B7.5</span><h4>Natijalarim sahifasi (student)</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>Student o'z normativ natijalarini ko'radi: normativ, topshirgan sana, ball / max ball, o'qituvchi feedbacki. Tekshirilmaganlar "kutilmoqda" holatida.</p></div>
+      <div class="tags"><span>related query</span><span>holat ko'rsatish</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Student faqat o'z javoblarini ko'radi</li>
+        <li>Ball va feedback tekshirilganlarda ko'rinadi</li>
+        <li>Umumiy ball normativ bo'yicha jamlanadi</li>
+      </ul></div>
+    </article>
+  </div>
+</section>
+
+<section id="b8">
+  <div class="phase">
+    <div class="phase-head"><span class="num">8-bosqich</span><h2>Coin va do'kon</h2><span class="cnt">5 task — mockup beriladi</span></div>
+    <p class="sub">Motivatsiya tizimi: reyting, do'kon, xarid. Bu bosqichda pul mantiqiga ehtiyotkor yondashishni o'rganamiz.</p>
+
+    <article class="card" data-task="B8.1">
+      <div class="card-head"><span class="tid">B8.1</span><h4>Coin tarixim (student)</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>Student o'z tranzaksiyalarini ko'radi: sana, miqdor (+/- rang bilan), sabab, izoh. Tepada joriy balans. Sahifalash qo'shing (<code>Paginator</code>, 20 tadan).</p></div>
+      <div class="tags"><span>Paginator</span><span>template filter</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Musbat yashil, manfiy qizil ko'rinadi</li>
+        <li>Sahifalash ishlaydi</li>
+        <li>Balans tarix yig'indisiga teng</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B8.2">
+      <div class="card-head"><span class="tid">B8.2</span><h4>Leaderboard</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>Balans bo'yicha top o'quvchilar. MUHIM: har student uchun <code>coin_balance</code> property chaqirish = N+1 muammo. To'g'ri yo'l — bitta query: <code>StudentProfile.objects.annotate(balance=Sum('coin_transactions__amount')).order_by('-balance')</code>. Joriy student o'z o'rnini ajratilgan ko'radi.</p></div>
+      <div class="tags"><span>annotate Sum</span><span>N+1 dars</span><span>Coalesce</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Ro'yxat bitta SQL query bilan chiqadi</li>
+        <li>Tranzaksiyasi yo'q student 0 bilan chiqadi (None emas — <code>Coalesce</code>)</li>
+        <li>Joriy user qatori ajratib ko'rsatiladi</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B8.3">
+      <div class="card-head"><span class="tid">B8.3</span><h4>Do'kon boshqaruvi (teacher/admin)</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>ShopItem CRUD: nomi, rasmi, narxi, soni. Rasm yuklash bilan ishlash (<code>request.FILES</code>). Studentlar uchun do'kon vitrinasi: aktiv va stock &gt; 0 mahsulotlar.</p></div>
+      <div class="tags"><span>ImageField form</span><span>MEDIA sozlash</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Rasm yuklanadi va vitrinada ko'rinadi (dev da MEDIA_URL sozlangan)</li>
+        <li>Stock 0 bo'lgan mahsulot vitrinada chiqmaydi</li>
+        <li>Faqat teacher/admin tahrirlashga kiradi</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B8.4">
+      <div class="card-head"><span class="tid">B8.4</span><h4>Xarid qilish</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>Eng mas'uliyatli task. Vitrinada "sotib olish" tugmasi (POST). View ichida <code>transaction.atomic()</code> blokida: balans yetarliligini tekshirish → minus CoinTransaction yozish → Purchase yaratish → stock ni 1 ga kamaytirish. Bironta qadam yiqilsa hammasi bekor bo'ladi — yarim xarid bo'lmaydi.</p></div>
+      <div class="tags"><span>transaction.atomic</span><span>balans tekshiruvi</span><span>F expression</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Balans yetmasa xarid bo'lmaydi, tushunarli xabar chiqadi</li>
+        <li>Xariddan keyin balans va stock to'g'ri kamaygan</li>
+        <li>Purchase o'z transaction iga bog'langan</li>
+        <li>Hammasi bitta atomic blokda</li>
+      </ul></div>
+      <pre>from django.db import transaction as db_tx
+
+with db_tx.atomic():
+    if student.coin_balance &lt; item.price:
+        messages.error(request, 'Coin yetarli emas')
+        return redirect('shop')
+    tx = CoinTransaction.objects.create(
+        student=student, amount=-item.price,
+        reason='purchase', comment=item.name,
+    )
+    Purchase.objects.create(student=student, item=item, transaction=tx)
+    item.stock = models.F('stock') - 1
+    item.save(update_fields=['stock'])</pre>
+    </article>
+
+    <article class="card" data-task="B8.5">
+      <div class="card-head"><span class="tid">B8.5</span><h4>Xaridlar boshqaruvi</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>Teacher/admin uchun: pending xaridlar ro'yxati, "berildi" tugmasi status ni delivered ga o'tkazadi. Student o'z xaridlari holatini ko'radi.</p></div>
+      <div class="tags"><span>status o'tkazish</span><span>ro'yxat filtri</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Berildi bosilgach xarid pending ro'yxatidan yo'qoladi</li>
+        <li>Student o'z xaridi holatini ko'radi</li>
+        <li>Status faqat POST bilan o'zgaradi</li>
+      </ul></div>
+    </article>
+  </div>
+</section>
+
+<section id="b9">
+  <div class="phase">
+    <div class="phase-head"><span class="num">9-bosqich</span><h2>Yangiliklar va dashboard</h2><span class="cnt">4 task — mockup beriladi</span></div>
+    <p class="sub">Hammasini bir joyga yig'amiz: bosh sahifa va rol dashboardlari.</p>
+
+    <article class="card" data-task="B9.1">
+      <div class="card-head"><span class="tid">B9.1</span><h4>News CRUD</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>Teacher/admin yangilik yaratadi (rasm bilan), qoralama sifatida saqlaydi, keyin chop etadi. Ro'yxat va detail sahifalar hammaga ochiq, lekin faqat is_published=True chiqadi. Muallif o'z qoralamalarini ko'radi.</p></div>
+      <div class="tags"><span>is_published filtri</span><span>muallif scoping</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Qoralama boshqalarga ko'rinmaydi, 404 qaytadi</li>
+        <li>Chop etilgan yangilik hammaga ochiq</li>
+        <li>Yangilik detailida rasm, muallif, sana bor</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B9.2">
+      <div class="card-head"><span class="tid">B9.2</span><h4>Bosh sahifa</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>Login talab qilmaydigan bosh sahifa: oxirgi 5 chop etilgan yangilik, bugungi darslar bloki (B5.4 dagi tag), kurslar ro'yxatiga havola.</p></div>
+      <div class="tags"><span>slice queryset</span><span>tag qayta ishlatish</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Login siz ochiladi</li>
+        <li>Yangiliklar eng yangisidan boshlab 5 ta</li>
+        <li>Bugungi darslar bloki ishlaydi</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B9.3">
+      <div class="card-head"><span class="tid">B9.3</span><h4>Student dashboard</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>B2.3 dagi bo'sh sahifani to'ldiring: coin balansi, guruhlari va yaqin darslari, oxirgi normativ natijalari, davomat foizi (present+late / jami), leaderboard'dagi o'rni.</p></div>
+      <div class="tags"><span>bir nechta queryset</span><span>foiz hisoblash</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Hamma blok real ma'lumot ko'rsatadi</li>
+        <li>Yangi (ma'lumotsiz) student sahifasi yiqilmaydi</li>
+        <li>Davomat foizi to'g'ri hisoblanadi</li>
+      </ul></div>
+    </article>
+
+    <article class="card" data-task="B9.4">
+      <div class="card-head"><span class="tid">B9.4</span><h4>Teacher dashboard</h4><label class="done"><input type="checkbox">bajarildi</label></div>
+      <div class="blk"><b>Vazifa:</b><p>Teacher uchun: guruhlari (o'quvchilar soni bilan), bugungi darslari, tekshirilmagan normativ javoblar soni (havola bilan), pending xaridlar soni. Hammasi minimal query bilan.</p></div>
+      <div class="tags"><span>aggregate</span><span>scoped counts</span></div>
+      <div class="blk"><b>Qabul mezoni:</b><ul class="mezon">
+        <li>Sonlar faqat shu teacher guruhlariga tegishli</li>
+        <li>Har blokdan tegishli sahifaga o'tiladi</li>
+        <li>Yangi teacher da sahifa bo'sh holatda chiroyli</li>
+      </ul></div>
+    </article>
+  </div>
+</section>
+
+<div class="note"><b>Mockuplar haqida:</b> har bosqich boshlanganda shu bosqich sahifalarining HTML mockup dizayni alohida fayl sifatida beriladi — sahifani aynan shu ko'rinishda yasaysiz. Belgilagan "bajarildi" katakchalaringiz shu brauzerda saqlanib qoladi.</div>
+
+</main>
+
+<footer>LMS o'quv loyihasi — 9 bosqich, 45 task. Model qatlami tayyor, qolgani sizniki.</footer>
+
+<script>
+document.querySelectorAll('.card').forEach(function (card) {
+  var id = card.dataset.task;
+  var box = card.querySelector('input[type="checkbox"]');
+  if (localStorage.getItem('lms_' + id) === '1') {
+    box.checked = true;
+    card.classList.add('checked');
+  }
+  box.addEventListener('change', function () {
+    localStorage.setItem('lms_' + id, box.checked ? '1' : '0');
+    card.classList.toggle('checked', box.checked);
+  });
+});
+</script>
+
+</body>
+</html>

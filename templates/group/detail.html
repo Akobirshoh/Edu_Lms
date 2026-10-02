@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}{{ group.name }}{% endblock %}
+{% block page_title %}{{ group.name }}{% endblock %}
+{% block page_subtitle %}<p>{{ group.course.title }} · {{ group.teacher }}</p>{% endblock %}
+
+{% block content %}
+<div class="panel">
+  <div class="panel-head">
+    <h2>Guruh ma’lumoti</h2>
+    <div>
+      <a class="btn btn-sm btn-secondary" href="{% url 'group_update' group.pk %}">Tahrirlash</a>
+      <a class="btn btn-sm btn-secondary" href="{% url 'group_students_manage' group.pk %}">O‘quvchilar</a>
+      <a class="btn btn-sm btn-secondary" href="{% url 'schedule_create' group.pk %}">Jadval</a>
+      <a class="btn btn-sm btn-secondary" href="{% url 'create_group_lesson' group.pk %}">Dars</a>
+      <a class="btn btn-sm btn-secondary" href="{% url 'group_journal' group.pk %}">Jurnal</a>
+    </div>
+  </div>
+  <div class="panel-body">
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-label">Boshlanish</div>
+        <div class="stat-num" style="font-size: 1.1rem;">{{ group.start_date|date:"d.m.Y" }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Mentor</div>
+        <div class="stat-num" style="font-size: 1.1rem;">{{ group.mentor|default:"—" }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Holat</div>
+        <div class="stat-num" style="font-size: 1.1rem;">{% if group.is_active %}Faol{% else %}Nofaol{% endif %}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">O‘quvchilar</div>
+        <div class="stat-num">{{ group.active_memberships|length }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="grid grid-2" style="margin-top: 1.25rem;">
+  <div class="panel">
+    <div class="panel-head"><h2>Faol o‘quvchilar</h2></div>
+    <div class="panel-body">
+      {% if group.active_memberships %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>O‘quvchi</th>
+              <th>Qo‘shilgan</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for m in group.active_memberships %}
+            <tr>
+              <td>{{ m.student }}</td>
+              <td>{{ m.joined_at|date:"d.m.Y" }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="empty">O‘quvchilar yo‘q.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h2>Haftalik jadval</h2></div>
+    <div class="panel-body">
+      {% if schedules %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Kun</th>
+              <th>Vaqt</th>
+              <th>Xona</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for s in schedules %}
+            <tr>
+              <td>{{ s.get_weekday_display }}</td>
+              <td>{{ s.start_time|time:"H:i" }}–{{ s.end_time|time:"H:i" }}</td>
+              <td>{{ s.room.name }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="empty">Jadval yo‘q.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="grid grid-2" style="margin-top: 1.25rem;">
+  <div class="panel">
+    <div class="panel-head"><h2>O‘quvchi qo‘shish</h2></div>
+    <div class="panel-body">
+      <form method="post" action="{% url 'group_students_manage' group.pk %}" class="form-card">
+        {% csrf_token %}
+        <div class="form-group">
+          <label>{{ add_form.students.label }}</label>
+          {{ add_form.students }}
+          {% if add_form.students.errors %}<div class="field-error">{{ add_form.students.errors }}</div>{% endif %}
+        </div>
+        <div class="form-actions">
+          <button type="submit" name="add_submit" class="btn btn-primary">Qo‘shish</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h2>O‘quvchini chiqarish</h2></div>
+    <div class="panel-body">
+      <form method="post" action="{% url 'group_students_manage' group.pk %}" class="form-card">
+        {% csrf_token %}
+        <div class="form-group">
+          <label>{{ remove_form.students.label }}</label>
+          {{ remove_form.students }}
+          {% if remove_form.students.errors %}<div class="field-error">{{ remove_form.students.errors }}</div>{% endif %}
+        </div>
+        <div class="form-actions">
+          <button type="submit" name="remove_submit" class="btn btn-danger">Chiqarish</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

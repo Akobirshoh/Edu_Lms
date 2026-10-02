@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}O‘quvchi paneli{% endblock %}
+{% block page_title %}O‘quvchi paneli{% endblock %}
+{% block page_subtitle %}<p>{% if student_profile %}{{ student_profile }}{% else %}Profil topilmadi{% endif %}</p>{% endblock %}
+
+{% block content %}
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-label">Coin balans</div>
+    <div class="stat-num">{{ coin_balance }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Davomat</div>
+    <div class="stat-num">{% if attendance_percent != None %}{{ attendance_percent }}%{% else %}—{% endif %}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Reyting</div>
+    <div class="stat-num">{% if leaderboard_rank %}{{ leaderboard_rank }} / {{ leaderboard_total }}{% else %}—{% endif %}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Guruhlar</div>
+    <div class="stat-num">{{ groups|length }}</div>
+  </div>
+</div>
+
+<div class="grid grid-2" style="margin-top: 1.25rem;">
+  <div class="panel">
+    <div class="panel-head"><h2>Mening guruhlarim</h2></div>
+    <div class="panel-body">
+      {% if groups %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Guruh</th>
+              <th>Kurs</th>
+              <th>O‘qituvchi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for g in groups %}
+            <tr>
+              <td>{{ g.name }}</td>
+              <td>{{ g.course.title }}</td>
+              <td>{{ g.teacher }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="empty">Siz hali guruhga biriktirilmagansiz.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <h2>Bugungi darslar</h2>
+      <a class="btn btn-sm btn-secondary" href="{% url 'weekly_schedule' %}">Jadval</a>
+    </div>
+    <div class="panel-body">
+      {% if today_schedules %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Vaqt</th>
+              <th>Guruh</th>
+              <th>Xona</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for s in today_schedules %}
+            <tr>
+              <td>{{ s.start_time|time:"H:i" }}–{{ s.end_time|time:"H:i" }}</td>
+              <td>{{ s.group.name }}</td>
+              <td>{{ s.room.name }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="empty">Bugun dars yo‘q.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="panel" style="margin-top: 1.25rem;">
+  <div class="panel-head">
+    <h2>So‘nggi normativlar</h2>
+    <a class="btn btn-sm btn-secondary" href="{% url 'student_results' %}">Natijalar</a>
+  </div>
+  <div class="panel-body">
+    {% if recent_answers %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Savol</th>
+            <th>Ball</th>
+            <th>Sana</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for a in recent_answers %}
+          <tr>
+            <td>{{ a.question.normativ.lesson.title }} — {{ a.question.text|truncatewords:12 }}</td>
+            <td>
+              {% if a.score != None %}
+              <span class="badge badge-success">{{ a.score }}</span>
+              {% else %}
+              <span class="badge badge-warning">Kutilmoqda</span>
+              {% endif %}
+            </td>
+            <td>{{ a.created_at|date:"d.m.Y H:i" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="empty">Hali javoblar yo‘q.</p>
+    {% endif %}
+  </div>
+</div>
+
+<div class="form-actions" style="margin-top: 1rem;">
+  <a class="btn btn-primary" href="{% url 'shop_list' %}">Do‘kon</a>
+  <a class="btn btn-secondary" href="{% url 'coin_history' %}">Coin tarixi</a>
+  <a class="btn btn-secondary" href="{% url 'leaderboard' %}">Reyting</a>
+</div>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Xaridlar{% endblock %}
+{% block page_title %}Xaridlar{% endblock %}
+{% block page_subtitle %}<p>Do‘kon buyurtmalari</p>{% endblock %}
+
+{% block content %}
+<div class="panel">
+  <div class="panel-head">
+    <h2>Ro‘yxat</h2>
+    <a class="btn btn-sm btn-secondary" href="{% url 'shop_list' %}">Do‘kon</a>
+  </div>
+  <div class="panel-body">
+    {% if purchases %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Sana</th>
+            <th>O‘quvchi</th>
+            <th>Mahsulot</th>
+            <th>Holat</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in purchases %}
+          <tr>
+            <td>{{ p.created_at|date:"d.m.Y H:i" }}</td>
+            <td>{{ p.student }}</td>
+            <td>{{ p.item.name }}</td>
+            <td>
+              {% if p.status == "pending" %}
+              <span class="badge badge-warning">{{ p.get_status_display }}</span>
+              {% else %}
+              <span class="badge badge-success">{{ p.get_status_display }}</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if p.status == "pending" and request.user.role != "student" %}
+              <form method="post" action="{% url 'mark_delivered' p.pk %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-sm btn-primary">Berildi</button>
+              </form>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="empty">Xaridlar yo‘q.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

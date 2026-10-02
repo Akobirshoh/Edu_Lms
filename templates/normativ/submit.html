@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Normativ topshirish{% endblock %}
+{% block page_title %}Normativ topshirish{% endblock %}
+{% block page_subtitle %}<p>{{ normativ.title }} · {{ normativ.lesson.title }}</p>{% endblock %}
+
+{% block content %}
+<div class="panel">
+  <div class="panel-head"><h2>{{ normativ.title }}</h2></div>
+  <div class="panel-body">
+    <p>{{ normativ.description|linebreaksbr }}</p>
+
+    {% if all_submitted %}
+    <p><span class="badge badge-success">Barcha javoblar topshirildi</span></p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Savol</th>
+            <th>Javob</th>
+            <th>Ball</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for qid, answer in existing.items %}
+          <tr>
+            <td>{{ answer.question.text }}</td>
+            <td>{{ answer.answer_text }}</td>
+            <td>
+              {% if answer.score != None %}
+              <span class="badge badge-success">{{ answer.score }}</span>
+              {% else %}
+              <span class="badge badge-warning">Tekshirilmoqda</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="form-actions">
+      <a href="{% url 'student_results' %}" class="btn btn-secondary">Natijalar</a>
+    </div>
+    {% else %}
+    <form method="post" class="form-card">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+      <div class="field-error">{{ form.non_field_errors }}</div>
+      {% endif %}
+      {% for field in form %}
+      <div class="form-group">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}<div class="field-error">{{ field.errors }}</div>{% endif %}
+      </div>
+      {% endfor %}
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Topshirish</button>
+        <a href="{% url 'student_results' %}" class="btn btn-secondary">Natijalar</a>
+      </div>
+    </form>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

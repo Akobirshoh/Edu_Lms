@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Xonalar{% endblock %}
+{% block page_title %}Xonalar{% endblock %}
+{% block page_subtitle %}<p>Xonalarni boshqarish</p>{% endblock %}
+
+{% block content %}
+<div class="grid grid-2">
+  <div class="panel">
+    <div class="panel-head"><h2>Ro‘yxat</h2></div>
+    <div class="panel-body">
+      {% if rooms %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Nomi</th>
+              <th>Sig‘imi</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for room in rooms %}
+            <tr>
+              <td>{{ room.name }}</td>
+              <td>{{ room.capacity }}</td>
+              <td>
+                <a class="btn btn-sm btn-secondary" href="{% url 'room_update' room.pk %}">Tahrirlash</a>
+                <a class="btn btn-sm btn-danger" href="{% url 'room_delete' room.pk %}">O‘chirish</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="empty">Xonalar yo‘q.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h2>Yangi xona</h2></div>
+    <div class="panel-body">
+      <form method="post" class="form-card">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+        <div class="field-error">{{ form.non_field_errors }}</div>
+        {% endif %}
+        {% for field in form %}
+        <div class="form-group">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}<div class="field-error">{{ field.errors }}</div>{% endif %}
+        </div>
+        {% endfor %}
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Qo‘shish</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

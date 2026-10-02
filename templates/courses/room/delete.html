@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Xonani o‘chirish{% endblock %}
+{% block page_title %}Xonani o‘chirish{% endblock %}
+{% block page_subtitle %}<p>{{ room.name }}</p>{% endblock %}
+
+{% block content %}
+<div class="panel">
+  <div class="panel-head"><h2>Tasdiqlash</h2></div>
+  <div class="panel-body">
+    <p>Rostdan ham <strong>{{ room.name }}</strong> xonasini o‘chirmoqchimisiz?</p>
+    <form method="post" class="form-actions">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">O‘chirish</button>
+      <a href="{% url 'room_list' %}" class="btn btn-secondary">Bekor</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

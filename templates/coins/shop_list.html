@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Do‘kon{% endblock %}
+{% block page_title %}Do‘kon{% endblock %}
+{% block page_subtitle %}<p>{% if balance != None %}Balans: <strong>{{ balance }}</strong> coin{% else %}Mahsulotlar{% endif %}</p>{% endblock %}
+
+{% block content %}
+<div class="panel">
+  <div class="panel-head">
+    <h2>Mahsulotlar</h2>
+    <div>
+      <a class="btn btn-sm btn-secondary" href="{% url 'purchases_list' %}">Xaridlar</a>
+      {% if request.user.role == 'admin' or request.user.role == 'teacher' or request.user.role == 'mentor' or request.user.is_superuser %}
+      <a class="btn btn-sm btn-primary" href="{% url 'shop_create' %}">Mahsulot qo‘shish</a>
+      <a class="btn btn-sm btn-secondary" href="{% url 'manual_coin' %}">Coin yozish</a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="panel-body">
+    {% if items %}
+    <div class="grid grid-3">
+      {% for item in items %}
+      <div class="course-card">
+        {% if item.image %}
+        <p><img src="{{ item.image.url }}" alt="{{ item.name }}" style="max-width: 100%; border-radius: 8px;"></p>
+        {% endif %}
+        <h3>{{ item.name }}</h3>
+        <p>
+          <span class="badge badge-success">{{ item.price }} coin</span>
+          <span class="badge badge-muted">{{ item.stock }} dona</span>
+        </p>
+        {% if request.user.role == 'student' %}
+        <form method="post" action="{% url 'purchase_item' item.pk %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary btn-sm">Sotib olish</button>
+        </form>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty">Mahsulotlar yo‘q.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

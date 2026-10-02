@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}LMS{% endblock %} — O‘quv markazi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/lms.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body class="{% if not request.user.is_authenticated %}auth-body{% endif %}">
+{% if request.user.is_authenticated %}
+<aside class="sidebar">
+  <a class="brand" href="{% url 'home' %}">
+    <div class="mark">LMS</div>
+    <div>
+      <div class="name">LMS</div>
+      <div class="sub">O‘quv markazi</div>
+    </div>
+  </a>
+  <nav>
+    <a class="nav-item {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">Bosh sahifa</a>
+    <a class="nav-item {% if 'course' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'course_list' %}">Kurslar</a>
+    <a class="nav-item {% if 'group' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'group_list' %}">Guruhlar</a>
+    <a class="nav-item {% if 'room' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'room_list' %}">Xonalar</a>
+    <a class="nav-item {% if request.resolver_match.url_name == 'weekly_schedule' %}active{% endif %}" href="{% url 'weekly_schedule' %}">Jadval</a>
+    <a class="nav-item {% if 'normativ' in request.path or 'checking' in request.path or 'results' in request.path %}active{% endif %}" href="{% if request.user.role == 'student' %}{% url 'student_results' %}{% else %}{% url 'teacher_queue' %}{% endif %}">Normativ</a>
+    <a class="nav-item {% if 'shop' in request.path or 'coins' in request.path or 'leaderboard' in request.path or 'purchases' in request.path %}active{% endif %}" href="{% url 'shop_list' %}">Do‘kon</a>
+    <a class="nav-item {% if 'news' in request.path %}active{% endif %}" href="{% url 'news_list' %}">Yangiliklar</a>
+    {% if request.user.role == 'admin' or request.user.is_superuser %}
+    <a class="nav-item" href="{% url 'teacher_list' %}">O‘qituvchilar</a>
+    <a class="nav-item" href="{% url 'register' %}">Foydalanuvchi</a>
+    <a class="nav-item" href="/admin/">Admin</a>
+    {% endif %}
+  </nav>
+  <div class="sidebar-foot">
+    <p>{{ request.user.get_full_name|default:request.user.username }}</p>
+    <span>{{ request.user.get_role_display }}</span>
+    <a class="btn-sidebar" href="{% url 'profile' %}">Profil</a>
+    <form method="post" action="{% url 'logout' %}">{% csrf_token %}
+      <button type="submit">Chiqish</button>
+    </form>
+  </div>
+</aside>
+<div class="main">
+  <header class="topbar">
+    <div class="page-heading">
+      <h1>{% block page_title %}Bosh sahifa{% endblock %}</h1>
+      {% block page_subtitle %}<p>O‘quv markazi boshqaruvi</p>{% endblock %}
+    </div>
+    <div class="topbar-spacer"></div>
+    {% if request.user.role == 'student' and request.user.student_profile %}
+    <div class="pill gold">{{ request.user.student_profile.coin_balance }} coin</div>
+    {% endif %}
+    <a class="avatar" href="{% url 'profile' %}">{{ request.user.username|first|upper }}</a>
+  </header>
+  <div class="content">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+    {% block content %}{% endblock %}
+  </div>
+</div>
+{% else %}
+  {% if messages %}
+    <div class="auth-messages">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+  {% block auth_content %}{% endblock %}
+{% endif %}
+{% block extra_js %}{% endblock %}
+</body>
+</html>
